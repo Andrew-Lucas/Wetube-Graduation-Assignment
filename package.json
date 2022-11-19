@@ -2,15 +2,26 @@
   "name": "wetube",
   "version": "1.0.0",
   "description": "Wetube Clone Coding",
-  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Andrew-Lucas/wetube.git"
+  },
+  "scripts": {
+    "dev": "nodemon --exec babel-node src/server.js"
   },
   "author": "Andrew Lucas",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Andrew-Lucas/wetube/issues"
   },
-  "homepage": "https://github.com/Andrew-Lucas/wetube#readme"
+  "homepage": "https://github.com/Andrew-Lucas/wetube#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.2",
+    "@babel/node": "^7.20.2",
+    "@babel/preset-env": "^7.20.2",
+    "nodemon": "^2.0.20"
+  }
 }
