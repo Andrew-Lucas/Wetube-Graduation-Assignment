@@ -9,6 +9,3 @@ userRouter.get('/delete', deleteUser)
 
 export default userRouter
 
-
-
-                                                                                                                                                                                                                                                         

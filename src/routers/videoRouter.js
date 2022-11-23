@@ -4,9 +4,9 @@ import {upload ,editVideos, deleteVideos, seeVideos} from "../controllers/videoC
 
 const videosRouter = express.Router()
 
-videosRouter.get('/upload', upload)
-videosRouter.get('/:id', seeVideos)
-videosRouter.get('/:id/edit', editVideos)
-videosRouter.get('/:id/delete', deleteVideos)
+ videosRouter.get('/upload', upload)
+videosRouter.get('/:id(\\d+)', seeVideos)
+videosRouter.get('/:id(\\d+)/edit', editVideos)
+videosRouter.get('/:id(\\d+)/delete', deleteVideos)
 
 export default videosRouter
