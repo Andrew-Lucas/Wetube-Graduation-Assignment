@@ -1,4 +1,18 @@
 extends base.pug
 
+block header
+  header 
+  if userObject.loggedIn
+    small Hello #{userObject.username}
+
+  nav
+    ul 
+        if userObject.loggedIn
+          li
+            a(href="/logout") Log out
+        else
+          li 
+            a(href="/login") Login
+
 block content 
   h1 Welcome to wetube Home page
