@@ -8,4 +8,4 @@ globalRouter.get('/', handleHome)
 globalRouter.get('/join', join)
 globalRouter.get('/login', handleLogin)
 
-export default globalRouter
+export default globalRouter 
