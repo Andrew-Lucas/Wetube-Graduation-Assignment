@@ -1,0 +1,9 @@
+mixin video(item)
+  div 
+    h3 
+      a(href=`/videos/${item.id}`)=item.title
+    ul 
+      li #{item.rating} Stars
+      li #{item.views} Viewers 
+      li #{item.comments} Comments 
+      li #{item.subscribers} Subscribers

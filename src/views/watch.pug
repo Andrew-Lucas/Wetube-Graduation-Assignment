@@ -1,4 +1,11 @@
 extends base.pug
 
-block content 
-  h1 Watch video # #{videoId}
+block content  
+  h1 Watching #{videoSelected.title}
+  ul 
+    li #{videoSelected.rating} Stars
+    li #{videoSelected.views} #{videoSelected.views === 1 ? "View" : "Views"}
+    li #{videoSelected.comments} Comments 
+    li #{videoSelected.subscribers} Subscribers
+
+  a(href=`${videoSelected.id}/edit`) Edit
