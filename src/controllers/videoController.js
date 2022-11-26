@@ -1,6 +1,6 @@
 const userObject = {
   username: "Andrew",
-  loggedIn: false
+  loggedIn: true
 }
 
 const videos = [1,2,3]
@@ -52,7 +52,16 @@ export const seeVideos = (req, res) =>{
   const videoSelected = videoDetails[id-1]
   return res.render('watch', {videoDetails, pageTitle: `Watching ${videoSelected.title}`, videoSelected})
 }
-export const search = (req, res)=> res.send("Search")
-export const upload = (req, res) => res.send('Upload Videos')
+
+export const getUpload = (req, res) => {
+  return res.render('upload', {pageTitle: `Upload Video`})
+}
+export const postUpload = (req, res) => {
+ // here we are going to add videos on 2023
+ console.log(req.body)
+ return res.redirect("/")
+}
+
 export const deleteVideos = (req, res) => res.send('Delete Videos') 
 
+export const search = (req, res)=> res.send("Search")

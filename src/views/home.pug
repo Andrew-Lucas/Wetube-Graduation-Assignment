@@ -16,6 +16,10 @@ block header
             a(href="/login") Login
 
 block content 
+  nav
+  ul  
+    li 
+      a(href="/videos/upload") upload
   h1 Welcome to wetube Home page
 
   h2 Video lists only
@@ -30,3 +34,4 @@ block content
   each videoDetail in videoDetails 
     +video(videoDetail)
 
+ 
