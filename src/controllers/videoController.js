@@ -59,6 +59,16 @@ export const getUpload = (req, res) => {
 export const postUpload = (req, res) => {
  // here we are going to add videos on 2023
  console.log(req.body)
+ const { uploadedTitle } = req.body
+ const newVideo = {
+   title: uploadedTitle,
+   rating: 0,
+   views: 0,
+   comments: 0,
+   subscribers: "0",
+   id: videoDetails.length+1
+ }
+ videoDetails.push(newVideo)
  return res.redirect("/")
 }
 
