@@ -1,14 +1,16 @@
-import mongoose from "mongoose"
+import mongoose from 'mongoose'
 
-mongoose.connect("mongodb://127.0.0.1:27017/wetube", {
+mongoose.connect('mongodb://127.0.0.1:27017/wetube', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
 
-const db = mongoose.connection
+const db = mongoose.connection 
 
-const dbOpen = ()=> console.log("Connected to DataBase ✅")
-db.on("error", (error) => console.log("DB Error:", error))
-db.once("open", dbOpen )
+const dbError = (error)=> console.log("😞DB Error:", error)
+const operDb = ()=> console.log("Connected to DataBase📀")
+
+db.on("error", dbError)
+db.once("open", operDb)
 
 

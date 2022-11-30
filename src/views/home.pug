@@ -2,7 +2,7 @@ extends base.pug
 include mixins/video
 
 block header
-  header 
+//-  header 
   if userObject.loggedIn
     small Hello #{userObject.username}
 
@@ -13,7 +13,7 @@ block header
             a(href="/logout") Log out
         else
           li 
-            a(href="/login") Login
+            a(href="/login") Login //
 
 block content 
   nav
@@ -22,15 +22,14 @@ block content
       a(href="/videos/upload") upload
   h1 Welcome to wetube Home page
 
-  h2 Video lists only
+//-  h2 Video lists only
   ul 
     each video in videos 
-      li Video ##{video}
+      li Video #
     else 
       span Nothing found 😞
 
 
   h2 Video Details
   each videoDetail in videoDetails 
-    +video(videoDetail)
-
+    +video(videoDetail) //
