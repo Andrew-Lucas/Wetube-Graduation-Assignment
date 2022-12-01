@@ -1,10 +1,15 @@
 import Video from "../models/Video"
 
-export const handleHome = (req, res) => res.render('home', {pageTitle: "Home Page"})
+export const handleHome = async (req, res) => {
+  Video.find(err, videoDoc)
+  console.log(videoDoc)
+  console.log(err)
+  await res.render('home', {pageTitle: "Home Page", videoDoc})
+}
 
 export const getEditVideos = (req, res) =>{
   const {id} = req.params
-   res.render('edit', {pageTitle: `Editing`})
+  res.render('edit', {pageTitle: `Editing`})
 }
 
 export const postEditVideos = (req, res) =>{

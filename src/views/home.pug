@@ -22,14 +22,14 @@ block content
       a(href="/videos/upload") upload
   h1 Welcome to wetube Home page
 
-//-  h2 Video lists only
+  h2 Videos
   ul 
-    each video in videos 
-      li Video #
+    each video in videoDoc 
+      li Video #{videoDoc}
     else 
-      span Nothing found 😞
+      span Sorry Nothing found 😞
 
 
-  h2 Video Details
+//- h2 Video Details
   each videoDetail in videoDetails 
-    +video(videoDetail) //
+    +video(videoDetail) 
