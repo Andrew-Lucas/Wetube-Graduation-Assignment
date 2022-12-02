@@ -1,15 +1,15 @@
 extends base.pug
 
 block content  
-  h1 Watching 
+  h1 Watching #{videoSelected.title}
 
-//-
-  ul 
-    li #{videoSelected.rating} Stars
-    li #{videoSelected.views} #{videoSelected.views === 1 ? "View" : "Views"}
-    li #{videoSelected.comments} Comments 
-    li #{videoSelected.subscribers} Subscribers 
--//
+  p #{videoSelected.description} 
+  span 
+    b Hashtags:: #{videoSelected.hashtags}
+  li Posted at: #{videoSelected.DateCreated} 
+  small  #{videoSelected.meta.rating} Stars
+  br
+  small  #{videoSelected.meta.views} #{videoSelected.views === 1 ? "View" : "Views"}
 
-
-  a(href=`${videoSelected.id}/edit`) Edit &rarr;
+  br
+  a(href=`${videoSelected.id}/edit`) Edit &rarr; 

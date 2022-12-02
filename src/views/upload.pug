@@ -3,6 +3,10 @@ extends base.pug
 block content 
   h1 #{pageTitle}
 
+  if(ErrorMessage)
+    span #{ErrorMessage}
   form(method="post")
-    input(name="uploadedTitle" type="text" placeholder="Vidoe title" required)
+    input(name="uploadedTitle" type="text" placeholder="Video title" required)
+    input(name="uploadDescription" type="text" placeholder="Description" required)
+    input(name="hashtagsNew" type="text" placeholder="Hashtag" required)
     input(type="submit", value="Upload Video") 

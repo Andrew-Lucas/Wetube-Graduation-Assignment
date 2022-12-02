@@ -4,5 +4,12 @@ block content
   h1 Editing: #{videoSelected.title}
   form(method="POST")
     h2 Change the title of the video
-    input(name="title", type="text", value=`${videoSelected.title}` required) 
+    label(for="editedTitle") Video title 
+    input(name="editedTitle", type="text", value=`${videoSelected.title}` required) 
+
+    label(for="editedDescription") Video description
+    input(name="editedDescription" type="text" value=`${videoSelected.description}` placeholder="Description" required)
+
+    label(for="editedHashtag") #hashtag
+    input(name="editedHashtag" type="text" value=`${videoSelected.hashtags.join()}` placeholder="Hashtag" required)
     input(type="submit", value="save")

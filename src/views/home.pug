@@ -23,13 +23,7 @@ block content
   h1 Welcome to wetube Home page
 
   h2 Videos
-  ul 
-    each video in videoDoc 
-      li Video #{videoDoc}
-    else 
-      span Sorry Nothing found 😞
-
-
-//- h2 Video Details
-  each videoDetail in videoDetails 
-    +video(videoDetail) 
+  each Video in Videos
+    +videos(Video)
+  else 
+    span Sorry Nothing found 😞
