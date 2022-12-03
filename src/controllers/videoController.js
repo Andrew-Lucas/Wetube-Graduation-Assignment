@@ -14,7 +14,7 @@ export const handleHome = async (req, res) => {
 export const getEditVideos = async (req, res) => {
   const { id } = req.params
   console.log('The ID: ', id)
-  const videoSelected = await Video.findById(id)
+  const videoSelected = await Video.exists({_id: id})
   if(!videoSelected){
     return res.render("404", {pageTitle: "Video not found"})
   }
@@ -30,7 +30,7 @@ export const postEditVideos = async (req, res) => {
   }
   videoSelected.title = editedTitle
   videoSelected.description = editedDescription
-  videoSelected.hashtags = editedHashtag
+  videoSelected.hashtags = editedHashtag.split(',').map((word) => (word.startsWith("#") ? word :`#${word}`))
   await videoSelected.save()
   return res.redirect(`/videos/${id}`)
 }
@@ -56,7 +56,7 @@ export const postUpload = async (req, res) => {
     await Video.create({
       title: uploadedTitle,
       description: uploadDescription,
-      hashtags: hashtagsNew.split(',').map((word) => `#${word}`)
+      hashtags: hashtagsNew.split(',').map((word) => (word.startsWith("#") ? word :`#${word}`))
     })
     console.log(Video)
     return res.redirect('/')
@@ -69,8 +69,6 @@ export const postUpload = async (req, res) => {
 export const deleteVideos = (req, res) => res.send('Delete Videos')
 
 export const search = (req, res) => res.send('Search')
-
-
 
 
 
