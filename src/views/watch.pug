@@ -3,13 +3,21 @@ extends base.pug
 block content  
   h1 Watching #{videoSelected.title}
 
-  p #{videoSelected.description} 
-  span 
-    b Hashtags:: #{videoSelected.hashtags}
-  li Posted at: #{videoSelected.DateCreated} 
+  p 
+    big #{videoSelected.description} 
+
+  ul 
+    b Hashtags
+    each hashtag in videoSelected.hashtags
+      li  #{hashtag}
+
+  span Posted at: #{videoSelected.DateCreated} 
+  br
   small  #{videoSelected.meta.rating} Stars
   br
   small  #{videoSelected.meta.views} #{videoSelected.views === 1 ? "View" : "Views"}
 
   br
-  a(href=`${videoSelected.id}/edit`) Edit &rarr; 
+  a(href=`${videoSelected.id}/edit`) Edit &rarr;
+  br
+  a(href=`${videoSelected.id}/delete`) Delete video &rarr; 

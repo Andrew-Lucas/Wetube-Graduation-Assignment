@@ -3,7 +3,6 @@ import Video from '../models/Video'
 export const handleHome = async (req, res) => {
   try {
     const Videos = await Video.find({})
-    console.log(Videos)
     res.render('home', { pageTitle: 'Home Page', Videos })
   } catch (err) {
     console.log('❌ DB ERROR::', err)
@@ -14,23 +13,25 @@ export const handleHome = async (req, res) => {
 export const getEditVideos = async (req, res) => {
   const { id } = req.params
   console.log('The ID: ', id)
-  const videoSelected = await Video.exists({_id: id})
+  const videoSelected = await Video.findById(id)
   if(!videoSelected){
     return res.render("404", {pageTitle: "Video not found"})
   }
-  res.render('edit', { pageTitle: `Editing ${videoSelected.title}`, videoSelected})
+  console.log("Video Object:",videoSelected)
+  return res.render('edit', { pageTitle: `Editing ${videoSelected.title}`, videoSelected})
 }
 
 export const postEditVideos = async (req, res) => {
   const { id } = req.params
   const { editedTitle, editedDescription, editedHashtag } = req.body
   const videoSelected = await Video.findById(id)
+  console.log(videoSelected)
   if(!videoSelected){
     return res.render("404", {pageTitle: "Video not found"})
   }
   videoSelected.title = editedTitle
   videoSelected.description = editedDescription
-  videoSelected.hashtags = editedHashtag.split(',').map((word) => (word.startsWith("#") ? word :`#${word}`))
+  videoSelected.hashtags = editedHashtag
   await videoSelected.save()
   return res.redirect(`/videos/${id}`)
 }
@@ -56,9 +57,8 @@ export const postUpload = async (req, res) => {
     await Video.create({
       title: uploadedTitle,
       description: uploadDescription,
-      hashtags: hashtagsNew.split(',').map((word) => (word.startsWith("#") ? word :`#${word}`))
+      hashtags: hashtagsNew
     })
-    console.log(Video)
     return res.redirect('/')
   } catch (err) {
       console.log('There was an error')
@@ -66,9 +66,13 @@ export const postUpload = async (req, res) => {
   }
 }
 
-export const deleteVideos = (req, res) => res.send('Delete Videos')
+export const deleteVideos = async(req, res) =>{
+  const {id} = req.params
+  console.log(id)
+  await Video.findByIdAndDelete(id)
+  res.redirect('/') 
+}
 
 export const search = (req, res) => res.send('Search')
-
 
 

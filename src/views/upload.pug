@@ -6,7 +6,7 @@ block content
   if(ErrorMessage)
     span #{ErrorMessage}
   form(method="post")
-    input(name="uploadedTitle" type="text" placeholder="Video title" required)
-    input(name="uploadDescription" type="text" placeholder="Description" required)
+    input(name="uploadedTitle" type="text" placeholder="Video title" required maxlength="70")
+    input(name="uploadDescription" type="text" placeholder="Description" required minlength="10")
     input(name="hashtagsNew" type="text" placeholder="Hashtag" required)
     input(type="submit", value="Upload Video") 

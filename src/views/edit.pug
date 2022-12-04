@@ -5,10 +5,10 @@ block content
   form(method="POST")
     h2 Change the title of the video
     label(for="editedTitle") Video title 
-    input(name="editedTitle", type="text", value=`${videoSelected.title}` required) 
+    input(name="editedTitle", type="text", value=`${videoSelected.title}` required maxlength="70") 
 
     label(for="editedDescription") Video description
-    input(name="editedDescription" type="text" value=`${videoSelected.description}` placeholder="Description" required)
+    input(name="editedDescription" type="text" value=`${videoSelected.description}` placeholder="Description" required minlength="10")
 
     label(for="editedHashtag") #hashtag
     input(name="editedHashtag" type="text" value=`${videoSelected.hashtags.join()}` placeholder="Hashtag" required)

@@ -8,6 +8,6 @@ const videosRouter = express.Router()
 videosRouter.route('/upload').get(getUpload).post(postUpload)
 videosRouter.get('/:id([0-9a-z]{24})', seeVideos)
 videosRouter.route("/:id([0-9a-z]{24})/edit").get(getEditVideos).post(postEditVideos)
-videosRouter.get('/:id/delete', deleteVideos)
+videosRouter.get('/:id([0-9a-z]{24})/delete', deleteVideos)
 
 export default videosRouter
