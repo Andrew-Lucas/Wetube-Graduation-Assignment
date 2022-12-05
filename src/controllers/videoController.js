@@ -2,7 +2,7 @@ import Video from '../models/Video'
 
 export const handleHome = async (req, res) => {
   try {
-    const Videos = await Video.find({})
+    const Videos = await Video.find({}).sort({DateCreated: "desc"})
     res.render('home', { pageTitle: 'Home Page', Videos })
   } catch (err) {
     console.log('❌ DB ERROR::', err)
@@ -73,6 +73,17 @@ export const deleteVideos = async(req, res) =>{
   res.redirect('/') 
 }
 
-export const search = (req, res) => res.send('Search')
+export const searchVideo = async (req, res) => {
+  const {keyword} = req.query
+  let searchedVideos = []
+  if(keyword){
+    searchedVideos = await Video.find({
+      title: {
+        $regex: new RegExp(keyword, "i")
+      }
+    })
+  }
+  res.render("SearchVideos", {pageTitle: "Search Videos", searchedVideos, keyword})
+}
 
 
