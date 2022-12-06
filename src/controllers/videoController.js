@@ -27,7 +27,7 @@ export const postEditVideos = async (req, res) => {
   const videoSelected = await Video.findById(id)
   console.log(videoSelected)
   if(!videoSelected){
-    return res.render("404", {pageTitle: "Video not found"})
+    return res.status(404).render("404", {pageTitle: "Video not found"})
   }
   videoSelected.title = editedTitle
   videoSelected.description = editedDescription
@@ -41,7 +41,7 @@ export const seeVideos = async (req, res) => {
   console.log('The ID: ', id)
   const videoSelected = await Video.findById(id)
   if(!videoSelected){
-    return res.render("404", {pageTitle: "Video not found"})
+    return res.status(404).render("404", {pageTitle: "Video not found"})
   }
   return res.render('watch', { pageTitle: `Watching ${videoSelected.title}`, videoSelected })
 }
@@ -85,5 +85,4 @@ export const searchVideo = async (req, res) => {
   }
   res.render("SearchVideos", {pageTitle: "Search Videos", searchedVideos, keyword})
 }
-
 

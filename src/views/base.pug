@@ -14,7 +14,15 @@ html(lang="en")
       br
       a(href="/search") search
       br
-      a(href="/join") Create an account
+      if !loggedIn 
+        a(href="/join") Sign In
+        br
+        a(href="/login") Login 
+      else 
+        a(href="/MyProfile") #{user.username} | Profile
+        br
+        a(href="/logout") Logout
+
       block content
       include partials/footer.pug
 

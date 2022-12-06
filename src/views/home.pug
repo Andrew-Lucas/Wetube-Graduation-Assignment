@@ -2,18 +2,7 @@ extends base.pug
 include mixins/video
 
 block header
-//-  header 
-  if userObject.loggedIn
-    small Hello #{userObject.username}
 
-  nav
-    ul 
-        if userObject.loggedIn
-          li
-            a(href="/logout") Log out
-        else
-          li 
-            a(href="/login") Login //
 
 block content 
   nav
