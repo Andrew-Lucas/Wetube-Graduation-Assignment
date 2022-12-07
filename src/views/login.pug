@@ -9,6 +9,8 @@ block content
     input(type="email" placeholder="E-mail" name="email" required value=`${email===undefined ? "" :`${email}`}`)
     input(type="password" placeholder="Password" name="password" required value=`${password===undefined ? "" :`${password}`}`)
     input(type="submit" value="Login")
+    hr
+    a(href=`${process.env.GITHUB_LOGIN_URL}`) Continue with github &rarr;
 
   hr
   div 

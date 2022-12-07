@@ -4,6 +4,7 @@ const userRouter = express.Router()
 
 userRouter.get('/:id', seeUser)
 userRouter.get('/edit', editUser)
+/* userRouter.get("/github/start", logout) */
 userRouter.get("/logout", logout)
 userRouter.get('/delete', deleteUser)
 
