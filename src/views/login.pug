@@ -10,7 +10,7 @@ block content
     input(type="password" placeholder="Password" name="password" required value=`${password===undefined ? "" :`${password}`}`)
     input(type="submit" value="Login")
     hr
-    a(href=`${process.env.GITHUB_LOGIN_URL}`) Continue with github &rarr;
+    a(href=`user/github/start`) Continue with github &rarr;
 
   hr
   div 
