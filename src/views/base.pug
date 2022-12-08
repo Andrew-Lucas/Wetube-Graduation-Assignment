@@ -19,9 +19,9 @@ html(lang="en")
         br
         a(href="/login") Login 
       else 
-        a(href="/MyProfile") #{user.username} | Profile
+        a(href="user/MyProfile") #{user.username} | Profile
         br
-        a(href="/logout") Logout
+        a(href="user/logout") Logout
 
       block content
       include partials/footer.pug

@@ -9,12 +9,13 @@ export const getJoin = (req, res) => {
 
 export const postJoin = async (req, res) => {
   const {name, username, email, password, password2, location} = req.body
-  const exists = await User.exists({$or:[{username},{email}]})
+  const exists = await User.exists({username, email})
+  console.log(exists)
   if(password !== password2){
     return res.status(400).render('Join', {pageTitle: "Create Account", errors: "The passwords are not matched", name, username, email, password, password2, location})
   }
   if(exists){
-    return res.status(400).render('Join', {pageTitle: "Create Account", errors: "The Username or Email already exists", name, username, email, password, password2, location})
+    return res.status(400).render('Join', {pageTitle: "Create Account", errors: "This is an account already exists", name, username, email, password, password2, location})
   }
   try{
     await User.create({
@@ -27,14 +28,15 @@ export const postJoin = async (req, res) => {
     res.redirect("/login") 
   } catch(err){
     console.log('There was an error')
-    return res.render('join', {pageTitle: `"Create Account` ,errors: err._message})
+    console.log(err/* ._message */)
+    return res.status(400).render('Join', {pageTitle: "Create Account", errors: "There is already an account with the same email, Login with Password", name, username, email, password, password2, location})
   }
 }
 
 
 
 export const getLogin = (req, res) => {
-  return res.render("login", {pageTitle: `Login` /* ,errors: err._message */})
+  return res.render("login", {pageTitle: `Login`})
 }
 
 export const postLogin = async (req, res) => {
@@ -61,7 +63,7 @@ export const startGithubLogin = (req, res)=>{
   const baseUrl = "https://github.com/login/oauth/authorize?"
   const configuration = {
     client_id:process.env.CLIENT_ID,
-    scope:"user:email read:user"
+    scope:"user:email user:location read:user"
   }
   const params = new URLSearchParams(configuration).toString()
   const finalUrl = `${baseUrl}${params}`
@@ -104,17 +106,47 @@ export const finishedGithubLogin = async (req, res)=>{
     if(!gitEmails){
       return res.redirect("/login")
     }
+    console.log(userReqJson.location)
     console.log(gitEmails)
-    res.send(JSON.stringify(json))
-  } else{
+
+    const existingUser = await User.findOne({username:userReqJson.login, email: gitEmails.email})
+    if(existingUser){
+      req.session.loggedIn = true
+      req.session.user = existingUser
+      return res.redirect("/")
+    } else{
+      /* try{ */
+        await User.create({
+          name: userReqJson.name,
+          avatarURL: userReqJson.avatar_url,
+          username: userReqJson.login,
+          email: gitEmails.email,
+          password: "",
+          githubLogin: true,
+          githubID: userReqJson.id,
+          location: userReqJson.location
+        })
+        req.session.loggedIn = true
+        const gitUser = await User.findOne({username: userReqJson.login})
+        req.session.user = gitUser
+        return res.redirect("/") 
+      /* } catch(err){
+        return res.render("/login", {pageTitle: `Login`, errors: "There is already an account with the same email, Login with Password"}) 
+      } */
+    }
+  } 
+  else{
     res.redirect("/login")
   }
 }
 
 
-export const logout = (req, res) => res.send('Logout of account')
+export const logout = (req, res) => {
+  req.session.destroy()
+  res.redirect('/')
+}
 
 export const editUser = (req, res) => res.send('Edit Your user profile')
 export const deleteUser = (req, res) => res.send('Delete your user profile')
-export const seeUser = (req, res) => res.send('See your account')
+export const seeUser = (req, res) => res.send('Seed your account')
  

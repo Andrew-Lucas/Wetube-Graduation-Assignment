@@ -18,7 +18,7 @@ export const getEditVideos = async (req, res) => {
     return res.render("404", {pageTitle: "Video not found"})
   }
   console.log("Video Object:",videoSelected)
-  return res.render('edit', { pageTitle: `Editing ${videoSelected.title}`, videoSelected})
+  return res.render('videos/edit', { pageTitle: `Editing ${videoSelected.title}`, videoSelected})
 }
 
 export const postEditVideos = async (req, res) => {
@@ -43,11 +43,11 @@ export const seeVideos = async (req, res) => {
   if(!videoSelected){
     return res.status(404).render("404", {pageTitle: "Video not found"})
   }
-  return res.render('watch', { pageTitle: `Watching ${videoSelected.title}`, videoSelected })
+  return res.render('videos/watch', { pageTitle: `Watching ${videoSelected.title}`, videoSelected })
 }
 
 export const getUpload = (req, res) => {
-  return res.render('upload', { pageTitle: `Upload Video` })
+  return res.render('videos/upload', { pageTitle: `Upload Video` })
 }
 
 export const postUpload = async (req, res) => {
@@ -62,7 +62,7 @@ export const postUpload = async (req, res) => {
     return res.redirect('/')
   } catch (err) {
       console.log('There was an error')
-      return res.render('upload', {pageTitle: `Upload Video` ,ErrorMessage: err._message})
+      return res.render('videos/upload', {pageTitle: `Upload Video` ,ErrorMessage: err._message})
   }
 }
 
@@ -83,6 +83,7 @@ export const searchVideo = async (req, res) => {
       }
     })
   }
-  res.render("SearchVideos", {pageTitle: "Search Videos", searchedVideos, keyword})
+  res.render("videos/SearchVideos", {pageTitle: "Search Videos", searchedVideos, keyword})
 }
 
+ 
