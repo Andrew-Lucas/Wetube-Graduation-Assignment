@@ -4,7 +4,7 @@ import bcrypt from "bcrypt"
 import { verify } from 'gulp-cli/lib/shared/cli-options'
 
 export const getJoin = (req, res) => {
-  res.render('Join', {pageTitle: "Create Account"})
+  res.render('join', {pageTitle: "Create Account"})
 }
 
 export const postJoin = async (req, res) => {
@@ -25,7 +25,7 @@ export const postJoin = async (req, res) => {
       password,
       location
     })
-    res.redirect("/login") 
+    res.redirect("login") 
   } catch(err){
     console.log('There was an error')
     console.log(err/* ._message */)
@@ -109,7 +109,7 @@ export const finishedGithubLogin = async (req, res)=>{
     console.log(userReqJson.location)
     console.log(gitEmails)
 
-    const existingUser = await User.findOne({username:userReqJson.login, email: gitEmails.email})
+    const existingUser = await User.findOne({/* username:userReqJson.login,  */email: gitEmails.email})
     if(existingUser){
       req.session.loggedIn = true
       req.session.user = existingUser
@@ -136,10 +136,64 @@ export const finishedGithubLogin = async (req, res)=>{
     }
   } 
   else{
-    res.redirect("/login")
+    res.redirect("login")
   }
 }
 
+export const getEditProfile = (req, res)=>{
+  return res.render("EditProfile", {pageTitle: "Edit Profile"})
+}
+
+export const postEditProfile = async (req, res)=>{
+/*   console.log(req.session.user._id) */
+  const {session:{
+    user:{_id}
+  }, body:{editName, editUsername, editLocation}} = req
+
+  try{
+    const existingUsername = await User.exists({username: editUsername})
+    if(existingUsername){
+      return res.status(400).render('EditProfile', {pageTitle: "Edit Profile", errors: "There is already an account with the same Username, try using a different Username"})
+    } 
+    const updatedUser = await User.findByIdAndUpdate(_id, {
+      name: editName,
+      username: editUsername,
+      location: editLocation
+    }, {new:true})
+    req.session.user = updatedUser
+     return res.redirect("/")
+  } catch{
+    console.log('there was an error in the server')
+    return res.status(400).render('EditProfile', {pageTitle: "Edit Profile", errors: "An error occured in the server"})
+  }
+}
+
+export const getChangePassword = (req, res)=>{
+  return res.render("ChangePassword", {pageTitle: "Edit Password"})
+}
+
+export const postChangePassword = async (req, res)=>{
+  const {session:{
+    user:{_id, password}
+  }, body:{OldPassword, NewPassword, ConfirmNew}} = req
+  try{
+    const savedUser= await User.findById(_id)
+    const correctPassword = await bcrypt.compare(OldPassword, savedUser.password)
+    if(!correctPassword){
+      return res.render("ChangePassword", {pageTitle: "Edit Password", errors: "The password you entered does not match the previously saved password", OldPassword, NewPassword, ConfirmNew})
+    }
+    if(NewPassword !== ConfirmNew){
+      return res.render("ChangePassword", {pageTitle: "Edit Password", errors: "The new password that you entered does not match the password you confirmed", OldPassword, NewPassword, ConfirmNew})
+    }
+    savedUser.password = NewPassword
+    await savedUser.save()
+    req.session.user.password = savedUser.password
+    return res.redirect("/")
+  } catch{
+    console.log("Password Catch error")
+    return res.status(400).render("ChangePassword", {pageTitle: "Edit Password"})
+  }
+}
 
 export const logout = (req, res) => {
   req.session.destroy()
