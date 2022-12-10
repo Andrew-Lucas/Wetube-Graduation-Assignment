@@ -5,7 +5,10 @@ block content
 
   if(ErrorMessage)
     span #{ErrorMessage}
-  form(method="post")
+  form(method="post" enctype="multipart/form-data")
+    label(for="videoID") Choose Video
+    input(type="file" accept="video/*" id="videoID" name="video" required)
+
     input(name="uploadedTitle" type="text" placeholder="Video title" required maxlength="70")
     input(name="uploadDescription" type="text" placeholder="Description" required minlength="10")
     input(name="hashtagsNew" type="text" placeholder="Hashtag" required)

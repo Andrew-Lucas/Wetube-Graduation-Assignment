@@ -33,6 +33,8 @@ app.use(localsMiddleware)
 
 app.use('/', globalRouter)
 app.use('/user', userRouter)
+app.use("/avatars", express.static("avatars"))
 app.use('/videos', videosRouter)
+app.use("/videos", express.static("videos"))
 
 export default app;

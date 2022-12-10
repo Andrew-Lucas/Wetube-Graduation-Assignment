@@ -15,11 +15,12 @@ block content
   else
     if errors
       span #{errors}
+    img(src="/" + user.avatarURL, height="100" width="100")
     form(method="post", enctype="multipart/form-data") 
       label(for="avatarImage") Select Profile Photo
       input(type="file" accept="image/*" id="avatarImage" name="avatar")
 
-      input(type="file" placeholder="Your name" name="editName" value=`${user.name}`)
+      input(type="text" placeholder="Your name" name="editName" value=`${user.name}`)
       input(type="text" placeholder="Username" name="editUsername" value=`${user.username}` `${disabled}`)
       input(type="text" placeholder="Your Location" name="editLocation" value=`${user.location===(undefined || null || "null") ? "" :`${user.location}`}`)
       input(type="submit" value="Save updated profile")

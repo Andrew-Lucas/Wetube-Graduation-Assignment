@@ -147,25 +147,26 @@ export const getEditProfile = (req, res)=>{
 export const postEditProfile = async (req, res)=>{
 /*   console.log(req.session.user._id) */
   const {session:{
-    user:{_id}
-  }, body:{editName, editUsername, editLocation}} = req
-
-  try{
-    const existingUsername = await User.exists({username: editUsername})
-    if(existingUsername){
-      return res.status(400).render('EditProfile', {pageTitle: "Edit Profile", errors: "There is already an account with the same Username, try using a different Username"})
-    } 
-    const updatedUser = await User.findByIdAndUpdate(_id, {
-      name: editName,
-      username: editUsername,
-      location: editLocation
-    }, {new:true})
-    req.session.user = updatedUser
-     return res.redirect("/")
-  } catch{
-    console.log('there was an error in the server')
-    return res.status(400).render('EditProfile', {pageTitle: "Edit Profile", errors: "An error occured in the server"})
-  }
+    user:{_id, avatarURL}
+  }, body:{editName, editUsername, editLocation,}, file} = req
+  console.log(file)
+    try{
+      const existingUsername = await User.findOne({_id, username: editUsername})
+      if(existingUsername){
+/*         return res.status(400).render('EditProfile', {pageTitle: "Edit Profile", errors: "There is already an account with the same Username, try using a different Username"}) */
+      } 
+      const updatedUser = await User.findByIdAndUpdate(_id, {
+        name: editName,
+        avatarURL: file ? file.path : avatarURL,
+        username: editUsername,
+        location: editLocation
+      }, {new:true})
+      req.session.user = updatedUser
+       return res.redirect("/")
+    } catch(err){
+      console.log('there was an error in the server', err)
+      return res.status(400).render('EditProfile', {pageTitle: "Edit Profile", errors: "An error occured in the server"})
+    }
 }
 
 export const getChangePassword = (req, res)=>{
@@ -195,6 +196,15 @@ export const postChangePassword = async (req, res)=>{
   }
 }
 
+export const seeUser = async (req, res) => {
+  const {id} = req.params
+  const user = await User.findById(id)
+  if(!user){
+    return res.status(404).render("404", {pageTitle: "User not found"})
+  }
+  return res.render('MyProfile', {pageTitle: `${user.name}`, user})
+}
+
 export const logout = (req, res) => {
   req.session.destroy()
   res.redirect('/')
@@ -202,5 +212,4 @@ export const logout = (req, res) => {
 
 export const editUser = (req, res) => res.send('Edit Your user profile')
 export const deleteUser = (req, res) => res.send('Delete your user profile')
-export const seeUser = (req, res) => res.send('Seed your account')
  

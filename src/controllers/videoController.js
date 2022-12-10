@@ -40,10 +40,11 @@ export const seeVideos = async (req, res) => {
   const { id } = req.params
   console.log('The ID: ', id)
   const videoSelected = await Video.findById(id)
+  const owner = await Video.findById(videoSelected.owner)
   if(!videoSelected){
     return res.status(404).render("404", {pageTitle: "Video not found"})
   }
-  return res.render('videos/watch', { pageTitle: `Watching ${videoSelected.title}`, videoSelected })
+  return res.render('videos/watch', { pageTitle: `Watching ${videoSelected.title}`, videoSelected,  })
 }
 
 export const getUpload = (req, res) => {
@@ -52,16 +53,21 @@ export const getUpload = (req, res) => {
 
 export const postUpload = async (req, res) => {
   // here we are going to add videos on 2023
+  const {user: {_id}} = req.session
+  console.log(_id)
+  const file = req.file
   const { uploadedTitle, uploadDescription, hashtagsNew } = req.body
   try {
     await Video.create({
+      videoURL: file.path,
       title: uploadedTitle,
       description: uploadDescription,
-      hashtags: hashtagsNew
+      hashtags: hashtagsNew,
+      owner: _id
     })
     return res.redirect('/')
   } catch (err) {
-      console.log('There was an error')
+      console.log('There was an error::', err)
       return res.render('videos/upload', {pageTitle: `Upload Video` ,ErrorMessage: err._message})
   }
 }
@@ -85,5 +91,3 @@ export const searchVideo = async (req, res) => {
   }
   res.render("videos/SearchVideos", {pageTitle: "Search Videos", searchedVideos, keyword})
 }
-
- 

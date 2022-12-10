@@ -19,7 +19,9 @@ html(lang="en")
         br
         a(href="/login") Login 
       else 
-        a(href="/user/EditMyProfile") #{user.username} | Profile
+        a(href=`/user/${user._id}`) My Profile 
+        br
+        a(href=`/user/EditMyProfile`) #{user.username} | Edit
         br
         a(href="user/logout") Logout
 
