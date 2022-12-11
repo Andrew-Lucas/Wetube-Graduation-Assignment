@@ -1,4 +1,5 @@
 import Video from '../models/Video'
+import User from '../models/Users'
 
 export const handleHome = async (req, res) => {
   try {
@@ -12,12 +13,10 @@ export const handleHome = async (req, res) => {
 
 export const getEditVideos = async (req, res) => {
   const { id } = req.params
-  console.log('The ID: ', id)
   const videoSelected = await Video.findById(id)
   if(!videoSelected){
     return res.render("404", {pageTitle: "Video not found"})
   }
-  console.log("Video Object:",videoSelected)
   return res.render('videos/edit', { pageTitle: `Editing ${videoSelected.title}`, videoSelected})
 }
 
@@ -25,7 +24,6 @@ export const postEditVideos = async (req, res) => {
   const { id } = req.params
   const { editedTitle, editedDescription, editedHashtag } = req.body
   const videoSelected = await Video.findById(id)
-  console.log(videoSelected)
   if(!videoSelected){
     return res.status(404).render("404", {pageTitle: "Video not found"})
   }
@@ -37,14 +35,18 @@ export const postEditVideos = async (req, res) => {
 }
 
 export const seeVideos = async (req, res) => {
-  const { id } = req.params
-  console.log('The ID: ', id)
-  const videoSelected = await Video.findById(id)
-  const owner = await Video.findById(videoSelected.owner)
-  if(!videoSelected){
-    return res.status(404).render("404", {pageTitle: "Video not found"})
+  try{
+    const { id } = req.params
+    const videoSelected = await Video.findById(id)
+    const ownerID = String(videoSelected.owner)
+    const owner = await User.findOne({id: ownerID})
+    if(!videoSelected){
+      return res.status(404).render("404", {pageTitle: "Video not found"})
+    }
+    return res.render('videos/watch', { pageTitle: `Watching ${videoSelected.title}`, videoSelected, owner })
+  } catch(err){
+    console.log("watch catched error:::", err)
   }
-  return res.render('videos/watch', { pageTitle: `Watching ${videoSelected.title}`, videoSelected,  })
 }
 
 export const getUpload = (req, res) => {
@@ -54,7 +56,6 @@ export const getUpload = (req, res) => {
 export const postUpload = async (req, res) => {
   // here we are going to add videos on 2023
   const {user: {_id}} = req.session
-  console.log(_id)
   const file = req.file
   const { uploadedTitle, uploadDescription, hashtagsNew } = req.body
   try {
@@ -74,7 +75,6 @@ export const postUpload = async (req, res) => {
 
 export const deleteVideos = async(req, res) =>{
   const {id} = req.params
-  console.log(id)
   await Video.findByIdAndDelete(id)
   res.redirect('/') 
 }

@@ -149,7 +149,6 @@ export const postEditProfile = async (req, res)=>{
   const {session:{
     user:{_id, avatarURL}
   }, body:{editName, editUsername, editLocation,}, file} = req
-  console.log(file)
     try{
       const existingUsername = await User.findOne({_id, username: editUsername})
       if(existingUsername){
