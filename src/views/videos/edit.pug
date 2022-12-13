@@ -1,15 +1,14 @@
 extends ../base.pug
 
 block content 
-  h1 Editing: #{videoSelected.title}
-  form(method="POST")
-    h2 Change the title of the video
-    label(for="editedTitle") Video title 
+  h1.forms-heading EDITING: #{videoSelected.title}
+  form.edit-profile_form(method="POST")
+    label.edit-video-labels(for="editedTitle") Video title:
     input(name="editedTitle", type="text", value=`${videoSelected.title}` required maxlength="70") 
 
-    label(for="editedDescription") Video description
+    label.edit-video-labels(for="editedDescription") Video description:
     input(name="editedDescription" type="text" value=`${videoSelected.description}` placeholder="Description" required minlength="10")
 
-    label(for="editedHashtag") #hashtag
+    label.edit-video-labels(for="editedHashtag") #hashtag:
     input(name="editedHashtag" type="text" value=`${videoSelected.hashtags.join()}` placeholder="Hashtag" required)
-    input(type="submit", value="save")
+    input.submit-updated-profile_btn(type="submit", value="save")

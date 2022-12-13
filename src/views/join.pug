@@ -1,19 +1,17 @@
 extends base
 
 block content 
-  h1 Create an account
+  h1.forms-heading Create an account
   if errors
     span #{errors}
-  form(method="POST")
+  form.edit-profile_form(method="POST")
     input(type="text" placeholder="Your name" name="name" required value=`${name===undefined ? "" :`${name}`}`)
     input(type="text" placeholder="Username" name="username" required value=`${username===undefined ? "" :`${username}`}`)
     input(type="email" placeholder="E-mail" name="email" required value=`${email===undefined ? "" :`${email}`}`)
     input(type="password" placeholder="Password" name="password" required value=`${password===undefined ? "" :`${password}`}`)
     input(type="password" placeholder="Confirm Password" name="password2" required value=`${password2===undefined ? "" :`${password2}`}`)
     input(type="text" placeholder="Your Location" name="location" value=`${location===undefined ? "" :`${location}`}`)
-    input(type="submit" value="Create Account")
+    input.submit-updated-profile_btn(type="submit" value="Create Account")
 
-  hr
-  div 
-    span Already have an account? 
-    a(href="/login") Login &rarr;
+    span.change-password-link.already-have-account Already have an account? 
+      a(href="/login") Login &rarr;

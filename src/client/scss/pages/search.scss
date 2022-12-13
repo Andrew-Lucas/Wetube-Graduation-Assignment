@@ -1,0 +1,27 @@
+@import "../other/_variables";
+@import "../other/_reset";
+@import "../other/_mixins";
+
+.search-form{
+  margin: 0 auto;
+  @include dc-c-space_btn();
+  .search-keyword_input{
+    height: 5vmin;
+    width: 65vmin;
+    border-radius: 5vmin;
+    background-color: $input-color;
+    outline: none;
+    color: gray;
+    caret-color: gray;
+    font-size: 2vmin;
+    padding: 0vmin 2vmin;
+    border: $border;
+  }
+}
+
+.no-videos{
+/*   margin-left: 15vmin; */
+  margin:  0 auto;
+  padding: 7% 12% 0% 0%;
+  font-size: 2vmin;
+}

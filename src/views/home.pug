@@ -1,19 +1,10 @@
 extends base.pug
 include mixins/video
 
-block header
-
-
 block content 
-  nav
-  ul  
-    li 
-      a(href="/videos/upload") upload
-
-  h1 Welcome to wetube Home page
-
-  h2 Videos
-  each Video in Videos
-    +videos(Video)
-  else 
-    span Sorry Nothing found 😞
+  main.home-body
+    div.main-videos-holder
+      each Video in Videos
+        +videos(Video)
+      else 
+        span.nothing-found No videos found 😞

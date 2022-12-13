@@ -165,6 +165,11 @@ export const postEditProfile = async (req, res)=>{
 }
 
 export const getChangePassword = (req, res)=>{
+  const {user: {githubLogin}} = req.session
+  console.log(githubLogin)
+  if(githubLogin){
+    return res.status(400).redirect("/user/EditMyProfile")
+  }
   return res.render("users/ChangePassword", {pageTitle: "Edit Password"})
 }
 

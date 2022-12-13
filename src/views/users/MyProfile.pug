@@ -2,8 +2,15 @@ extends ../base
 include ../mixins/video
 
 block content 
-  h1 #{user.username}% Profile
+  div.user-profile 
+    a(href=`/user/EditMyProfile`)
+      if user.avatarURL && !user.githubLogin
+        img.profile-picture(src="/" + user.avatarURL)
+      else 
+         i.fa-solid.fa-user.fa-user_my-profile
+      h1 #{user.username}
 
-  div 
-    each video in user.userVideos
-      +videos(video)
+  main.home-body
+    div.main-videos-holder.my-profile_main-videos-holder
+      each video in user.userVideos
+        +videos(video)

@@ -1,15 +1,15 @@
 extends ../base.pug
 
 block content 
-  h1 #{pageTitle}
+  h1.forms-heading #{pageTitle}
 
   if(ErrorMessage)
     span #{ErrorMessage}
-  form(method="post" enctype="multipart/form-data")
+  form.edit-profile_form(method="post" enctype="multipart/form-data")
     label(for="videoID") Choose Video
     input(type="file" accept="video/*" id="videoID" name="video" required)
 
     input(name="uploadedTitle" type="text" placeholder="Video title" required maxlength="70")
     input(name="uploadDescription" type="text" placeholder="Description" required minlength="10")
     input(name="hashtagsNew" type="text" placeholder="Hashtag" required)
-    input(type="submit", value="Upload Video") 
+    input.submit-updated-profile_btn(type="submit", value="Upload Video") 

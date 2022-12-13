@@ -1,0 +1,17 @@
+@import '../other/_variables';
+@import '../other/_reset';
+@import '../other/_mixins';
+
+.already-have-account{
+  font-size: 1.7vmin;
+  &:hover{
+    text-decoration: none !important;
+  }
+  a{
+    color: tomato;
+    font-size: 2vmin;
+    &:hover{
+      text-decoration: underline;
+    }
+  }
+}

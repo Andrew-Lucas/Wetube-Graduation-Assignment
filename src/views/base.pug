@@ -8,27 +8,10 @@ html(lang="en")
     link(rel="stylesheet", href="/static/css/styles.css")
     title #{ pageTitle } | Wetube
   body 
+    include partials/header.pug
     block header
 
     main 
-      a(href="/")
-        i.fab.fa-youtube 
-      br
-      a(href="/search") search
-      br
-      if !loggedIn 
-        a(href="/join") Sign In
-        br
-        a(href="/login") Login 
-      else 
-        a(href=`/user/${user._id}`) My Profile 
-        br
-        a(href=`/user/EditMyProfile`) #{user.username} | Edit
-        br
-        a(href="/user/logout") Logout
-
       block content
       include partials/footer.pug
       script(src="/static/js/main.js") 
-
-

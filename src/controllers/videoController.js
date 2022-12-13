@@ -2,9 +2,11 @@ import Video from '../models/Video'
 import User from '../models/Users'
 
 export const handleHome = async (req, res) => {
+/*   const { id } = req.params
+  const videoSelected = await Video.findById(id).populate("owner") */
   try {
-    const Videos = await Video.find({}).sort({DateCreated: "desc"})
-    res.render('home', { pageTitle: 'Home Page', Videos })
+    const Videos = await Video.find({}).sort({DateCreated: "desc"}).populate("owner")
+    res.render('home', { pageTitle: 'Home Page', Videos, /* videoSelected */ })
   } catch (err) {
     console.log('❌ DB ERROR::', err)
     res.send('<h1>Sorry, an error occured!!!</h1>')

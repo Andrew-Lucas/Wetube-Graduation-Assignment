@@ -1,0 +1,17 @@
+@mixin dr-space_btn {
+  display:flex;
+  justify-content: space-between;
+}
+
+@mixin dr-c-space_btn {
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin dc-c-space_btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}

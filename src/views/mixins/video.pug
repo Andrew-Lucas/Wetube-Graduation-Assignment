@@ -1,10 +1,13 @@
 mixin videos(item)
-  div 
-    h3 
-      a(href=`/videos/${item.id}`)=item.title
-    ul 
-      li #{item.description}
-      li #{item.hashtags}
-      li Posted At: #{item.DateCreated}
-      li #{item.meta.views} Viewers 
-      li #{item.meta.rating} Stars 
+  a(href=`/videos/${item.id}`)
+    div.video-holder
+      video.video_preview(src="/" + item.videoURL)
+      span.video_info=item.title
+      span.video_info Posted by: #{item.owner.username}
+
+
+      //-  li #{item.description}
+        li #{item.hashtags}
+        li Posted At: #{item.DateCreated}
+        li #{item.meta.views} Viewers 
+        li #{item.meta.rating} Stars 

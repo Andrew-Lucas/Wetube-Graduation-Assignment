@@ -1,29 +1,30 @@
 extends ../base
 
 block content 
-  h1 Edit Your Profile
-  if user.githubLogin 
-    h2 You cannot edit your saved github name,username or location 
-    img(src="/" + user.avatarURL, height="100" width="100")
-    form(method="post", enctype="multipart/form-data") 
-      label(for="avatarImage") Select Profile Photo
-      input(type="file" accept="image/*" id="avatarImage" name="avatar")
+  h1.forms-heading EDIT YOUR PROFILE
 
-      input(type="text" placeholder="Your name" name="editName" value=`${user.name}` disabled)
-      input(type="text" placeholder="Username" name="editUsername" value=`${user.username}` disabled)
-      input(type="text" placeholder="Your Location" name="editLocation" value=`${user.location===(undefined || null) ? "" :`${user.location}`}` disabled)
-      input(type="submit" value="Save updated profile")
-  else
-    if errors
-      span #{errors}
-    img(src="/" + user.avatarURL, height="100" width="100")
-    form(method="post", enctype="multipart/form-data") 
-      label(for="avatarImage") Select Profile Photo
-      input(type="file" accept="image/*" id="avatarImage" name="avatar")
+  if errors
+    span #{errors}
 
+  form.edit-profile_form(method="post", enctype="multipart/form-data")
+    if user.avatarURL && !user.githubLogin
+      img.edit_profile-picture(src="/" + user.avatarURL)
+    else 
+      i.fa-solid.fa-user.fa-user_edit-my-profile
+    label(for="avatarImage")#select-profile-photo Select Profile Photo
+    input.edit-avatar-input(type="file" accept="image/*" id="avatarImage" name="avatar")
+    if user.githubLogin 
+      h2.github-form-validate You cannot edit your saved github name,username or location 
+      input.github-account-edit_input(type="text" placeholder="Your name" name="editName" value=`${user.name}` disabled)
+      input.github-account-edit_input(type="text" placeholder="Username" name="editUsername" value=`${user.username}` disabled)
+      input.github-account-edit_input(type="text" placeholder="Your Location" name="editLocation" value=`${user.location===(undefined || null) ? "" :`${user.location}`}` disabled)
+
+    else 
       input(type="text" placeholder="Your name" name="editName" value=`${user.name}`)
       input(type="text" placeholder="Username" name="editUsername" value=`${user.username}` `${disabled}`)
       input(type="text" placeholder="Your Location" name="editLocation" value=`${user.location===(undefined || null || "null") ? "" :`${user.location}`}`)
-      input(type="submit" value="Save updated profile")
 
-    a(href="EditMyProfile/ChangePassword") Change Password &rarr;
+    input.submit-updated-profile_btn(type="submit" value="Save updated profile")
+
+    if !user.githubLogin
+      a.change-password-link(href="EditMyProfile/ChangePassword") Change Password &rarr;

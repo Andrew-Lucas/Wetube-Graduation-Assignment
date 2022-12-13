@@ -1,0 +1,34 @@
+@import "../other/_variables";
+@import "../other/_reset";
+@import "../other/_mixins";
+
+.header-nav{
+  @include dr-c-space_btn();
+  background-color: $bg;
+  font-size: 1.1vmax;
+  position: fixed;
+  top: 0%;
+  padding: 0% 1.5%;
+  box-sizing: border-box;
+  height: 8.5vmin;
+  width: 100%;
+  border-bottom: $border;
+  .fa-youtube{
+    font-size: 2.7vmax;
+    color: $youtube-red;
+  }
+  div{
+    @include dr-c-space_btn();
+    width: 40%;
+    height: 100%;
+    .home-avatar_photo{
+      border-radius: 50%;
+      height: 6.5vmin;
+      width: 6.5vmin;
+    }
+    .fa-user_nav{
+      font-size: 3.5vmin;
+    }
+  }
+}
+

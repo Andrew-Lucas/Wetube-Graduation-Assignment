@@ -1,18 +1,18 @@
 extends base
 
 block content 
-  h1 Login
+  h1.forms-heading Login
   if errors
     span #{errors}
-  form(method="POST")
+  form.edit-profile_form(method="POST")
     input(type="text" placeholder="Username" name="username" required value=`${username===undefined ? "" :`${username}`}`)
     input(type="email" placeholder="E-mail" name="email" required value=`${email===undefined ? "" :`${email}`}`)
     input(type="password" placeholder="Password" name="password" required value=`${password===undefined ? "" :`${password}`}`)
-    input(type="submit" value="Login")
-    hr
-    a(href=`user/github/start`) Continue with github &rarr;
+    input.submit-updated-profile_btn(type="submit" value="Login")
 
-  hr
-  div 
-    span Don't have an account? 
+    a.change-password-link.continue-with-github(href=`user/github/start`)
+      i.fab.fa-github 
+      | Continue with github &rarr;
+ 
+  span.already-have-account.dont-have-account Don't have an account? 
     a(href="/join") Sign In &rarr;

@@ -1,0 +1,13 @@
+@import '../other/_variables';
+@import '../other/_reset';
+@import '../other/_mixins';
+
+.fa-github{
+  margin-right: 1vmin;
+}
+
+.dont-have-account{
+  margin-top: 2vmin;
+  display: flex;
+  justify-content: center;
+}

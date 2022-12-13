@@ -1,0 +1,17 @@
+nav.header-nav
+  a(href="/")
+    i.fab.fa-youtube 
+  div
+    a(href="/search") 
+      i.fa-solid.fa-magnifying-glass
+    if !loggedIn 
+      a(href="/join") Sign In
+      a(href="/login") Login 
+    else 
+      a(href="/videos/upload") UPLOAD VIDEO
+      a(href=`/user/${user._id}`)
+        if user.avatarURL && !user.githubLogin
+          img.profile-picture.home-avatar_photo(src="/" + user.avatarURL)
+        else 
+          i.fa-solid.fa-user.fa-user_nav
+      a(href="/user/logout") LOGOUT

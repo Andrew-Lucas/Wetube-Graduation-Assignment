@@ -2,10 +2,12 @@ extends ../base.pug
 include ../mixins/video
 
 block content
-  form(method="get") 
-    input(type="text",placeholder="Search for videos",name="keyword", value=`${keyword===undefined ? "" :`${keyword}`}`)
-    input(type="submit", value="Search Video")
+  form.search-form(method="get") 
+    input.search-keyword_input(type="text",placeholder="Search for videos",name="keyword", value=`${keyword===undefined ? "" :`${keyword}`}`)
 
-  div 
-    each searchedVideo in searchedVideos
-      +videos(searchedVideo)
+  main.home-body
+    div.main-videos-holder
+      each searchedVideo in searchedVideos
+        +videos(searchedVideo)
+      else 
+        span.nothing-found No videos found
