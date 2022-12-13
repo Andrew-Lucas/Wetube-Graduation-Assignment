@@ -31,10 +31,11 @@ app.use((req,res,next)=>{
 
 app.use(localsMiddleware)
 
+app.use("/avatars", express.static("avatars"))
+app.use("/videos", express.static("videos"))
+app.use("/static", express.static("assets"))
 app.use('/', globalRouter)
 app.use('/user', userRouter)
-app.use("/avatars", express.static("avatars"))
 app.use('/videos', videosRouter)
-app.use("/videos", express.static("videos"))
 
 export default app;

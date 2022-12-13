@@ -1,17 +1,18 @@
-extends base
+extends ../base
 
 block content 
   h1 Edit Your Profile
   if user.githubLogin 
-    h2 You cannot edit your github account
+    h2 You cannot edit your saved github name,username or location 
+    img(src="/" + user.avatarURL, height="100" width="100")
     form(method="post", enctype="multipart/form-data") 
       label(for="avatarImage") Select Profile Photo
       input(type="file" accept="image/*" id="avatarImage" name="avatar")
 
       input(type="text" placeholder="Your name" name="editName" value=`${user.name}` disabled)
       input(type="text" placeholder="Username" name="editUsername" value=`${user.username}` disabled)
-      input(type="text" placeholder="Your Location" name="editLocation" value=`${user.location===(undefined || null || "null") ? "" :`${user.location}`}` disabled)
-      input(type="submit" value="Save updated profile" disabled)
+      input(type="text" placeholder="Your Location" name="editLocation" value=`${user.location===(undefined || null) ? "" :`${user.location}`}` disabled)
+      input(type="submit" value="Save updated profile")
   else
     if errors
       span #{errors}

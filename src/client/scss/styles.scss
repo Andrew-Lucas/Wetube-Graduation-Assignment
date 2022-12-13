@@ -1,0 +1,10 @@
+@import "./_variables";
+
+body{
+  background-color: $bg;
+  color: $white;
+  a{
+    color: inherit;
+    text-decoration: none;
+  }
+}

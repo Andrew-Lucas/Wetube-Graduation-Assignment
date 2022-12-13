@@ -1,4 +1,5 @@
 import User from '../models/Users'
+import Video from '../models/Video'
 import fetch from 'node-fetch'
 import bcrypt from "bcrypt"
 import { verify } from 'gulp-cli/lib/shared/cli-options'
@@ -10,7 +11,6 @@ export const getJoin = (req, res) => {
 export const postJoin = async (req, res) => {
   const {name, username, email, password, password2, location} = req.body
   const exists = await User.exists({username, email})
-  console.log(exists)
   if(password !== password2){
     return res.status(400).render('Join', {pageTitle: "Create Account", errors: "The passwords are not matched", name, username, email, password, password2, location})
   }
@@ -95,7 +95,6 @@ export const finishedGithubLogin = async (req, res)=>{
       }
     })
     const userReqJson = await userReq.json()
-    console.log(userReqJson)
     const emailReq = await fetch("https://api.github.com/user/emails", {
       headers:{
         Authorization: `token ${access_token}`
@@ -106,8 +105,6 @@ export const finishedGithubLogin = async (req, res)=>{
     if(!gitEmails){
       return res.redirect("/login")
     }
-    console.log(userReqJson.location)
-    console.log(gitEmails)
 
     const existingUser = await User.findOne({/* username:userReqJson.login,  */email: gitEmails.email})
     if(existingUser){
@@ -141,18 +138,17 @@ export const finishedGithubLogin = async (req, res)=>{
 }
 
 export const getEditProfile = (req, res)=>{
-  return res.render("EditProfile", {pageTitle: "Edit Profile"})
+  return res.render("users/EditProfile", {pageTitle: "Edit Profile"})
 }
 
 export const postEditProfile = async (req, res)=>{
-/*   console.log(req.session.user._id) */
   const {session:{
     user:{_id, avatarURL}
   }, body:{editName, editUsername, editLocation,}, file} = req
     try{
       const existingUsername = await User.findOne({_id, username: editUsername})
       if(existingUsername){
-/*         return res.status(400).render('EditProfile', {pageTitle: "Edit Profile", errors: "There is already an account with the same Username, try using a different Username"}) */
+/*         return res.status(400).render('users/EditProfile', {pageTitle: "Edit Profile", errors: "There is already an account with the same Username, try using a different Username"}) */
       } 
       const updatedUser = await User.findByIdAndUpdate(_id, {
         name: editName,
@@ -164,12 +160,12 @@ export const postEditProfile = async (req, res)=>{
        return res.redirect("/")
     } catch(err){
       console.log('there was an error in the server', err)
-      return res.status(400).render('EditProfile', {pageTitle: "Edit Profile", errors: "An error occured in the server"})
+      return res.status(400).render('users/EditProfile', {pageTitle: "Edit Profile", errors: "An error occured in the server"})
     }
 }
 
 export const getChangePassword = (req, res)=>{
-  return res.render("ChangePassword", {pageTitle: "Edit Password"})
+  return res.render("users/ChangePassword", {pageTitle: "Edit Password"})
 }
 
 export const postChangePassword = async (req, res)=>{
@@ -180,10 +176,10 @@ export const postChangePassword = async (req, res)=>{
     const savedUser= await User.findById(_id)
     const correctPassword = await bcrypt.compare(OldPassword, savedUser.password)
     if(!correctPassword){
-      return res.render("ChangePassword", {pageTitle: "Edit Password", errors: "The password you entered does not match the previously saved password", OldPassword, NewPassword, ConfirmNew})
+      return res.render("users/ChangePassword", {pageTitle: "Edit Password", errors: "The password you entered does not match the previously saved password", OldPassword, NewPassword, ConfirmNew})
     }
     if(NewPassword !== ConfirmNew){
-      return res.render("ChangePassword", {pageTitle: "Edit Password", errors: "The new password that you entered does not match the password you confirmed", OldPassword, NewPassword, ConfirmNew})
+      return res.render("users/ChangePassword", {pageTitle: "Edit Password", errors: "The new password that you entered does not match the password you confirmed", OldPassword, NewPassword, ConfirmNew})
     }
     savedUser.password = NewPassword
     await savedUser.save()
@@ -191,17 +187,17 @@ export const postChangePassword = async (req, res)=>{
     return res.redirect("/")
   } catch{
     console.log("Password Catch error")
-    return res.status(400).render("ChangePassword", {pageTitle: "Edit Password"})
+    return res.status(400).render("users/ChangePassword", {pageTitle: "Edit Password"})
   }
 }
 
 export const seeUser = async (req, res) => {
   const {id} = req.params
-  const user = await User.findById(id)
+  const user = await User.findById(id).populate("userVideos")
   if(!user){
     return res.status(404).render("404", {pageTitle: "User not found"})
   }
-  return res.render('MyProfile', {pageTitle: `${user.name}`, user})
+  return res.render('users/MyProfile', {pageTitle: `${user.name}`, user})
 }
 
 export const logout = (req, res) => {

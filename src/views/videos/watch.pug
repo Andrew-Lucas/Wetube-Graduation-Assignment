@@ -5,7 +5,8 @@ block content
 
   video(src="/" + videoSelected.videoURL controls height="650" width="1200") 
 
-  small Created by: #{owner.username}
+  small Created by: 
+    a(href=`/user/${videoSelected.owner.id}`) #{videoSelected.owner.username}
   br
 
   p 
@@ -23,7 +24,7 @@ block content
   small  #{videoSelected.meta.views} #{videoSelected.meta.views === 1 ? "View" : "Views"}
   br
 
-  if String(videoSelected.owner) === String(user._id)
+  if String(videoSelected.owner._id) === String(user._id)
     a(href=`${videoSelected.id}/edit`) Edit &rarr;
     br
     a(href=`${videoSelected.id}/delete`) Delete video &rarr; 

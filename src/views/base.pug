@@ -3,14 +3,16 @@ html(lang="en")
   head
     meta(charset="UTF-8")
     meta(http-equiv="X-UA-Compatible", content="IE=edge")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")   
-    link(rel="stylesheet" href="https://unpkg.com/mvp.css@1.12/mvp.css")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css")
+    link(rel="stylesheet", href="/static/css/styles.css")
     title #{ pageTitle } | Wetube
   body 
     block header
 
     main 
-      a(href="/") home 
+      a(href="/")
+        i.fab.fa-youtube 
       br
       a(href="/search") search
       br
@@ -23,9 +25,10 @@ html(lang="en")
         br
         a(href=`/user/EditMyProfile`) #{user.username} | Edit
         br
-        a(href="user/logout") Logout
+        a(href="/user/logout") Logout
 
       block content
       include partials/footer.pug
+      script(src="/static/js/main.js") 
 
 

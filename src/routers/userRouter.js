@@ -8,8 +8,8 @@ userRouter.route('/EditMyProfile').all(protectedMiddleware).get(getEditProfile).
 userRouter.route('/EditMyProfile/ChangePassword').all(protectedMiddleware).get(getChangePassword).post(postChangePassword)
 userRouter.get("/github/start", publicOnlyMiddleware, startGithubLogin)
 userRouter.get("/github/finished", publicOnlyMiddleware, finishedGithubLogin) 
-userRouter.get('/delete', deleteUser)
-userRouter.get('/:id', seeUser)
+userRouter.get('/delete',protectedMiddleware, deleteUser)
+userRouter.get('/:id',protectedMiddleware, seeUser)
 
 export default userRouter
 

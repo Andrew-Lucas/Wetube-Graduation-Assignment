@@ -14,6 +14,9 @@ export const handleHome = async (req, res) => {
 export const getEditVideos = async (req, res) => {
   const { id } = req.params
   const videoSelected = await Video.findById(id)
+  if(String(videoSelected.owner) !== req.session.user._id){
+    return res.status(403).redirect("/")
+  }
   if(!videoSelected){
     return res.render("404", {pageTitle: "Video not found"})
   }
@@ -37,13 +40,12 @@ export const postEditVideos = async (req, res) => {
 export const seeVideos = async (req, res) => {
   try{
     const { id } = req.params
-    const videoSelected = await Video.findById(id)
-    const ownerID = String(videoSelected.owner)
-    const owner = await User.findOne({id: ownerID})
+    const videoSelected = await Video.findById(id).populate("owner")
+    console.log(videoSelected)
     if(!videoSelected){
       return res.status(404).render("404", {pageTitle: "Video not found"})
     }
-    return res.render('videos/watch', { pageTitle: `Watching ${videoSelected.title}`, videoSelected, owner })
+    return res.render('videos/watch', { pageTitle: `Watching ${videoSelected.title}`, videoSelected })
   } catch(err){
     console.log("watch catched error:::", err)
   }
@@ -59,13 +61,17 @@ export const postUpload = async (req, res) => {
   const file = req.file
   const { uploadedTitle, uploadDescription, hashtagsNew } = req.body
   try {
-    await Video.create({
+   const newVideo = await Video.create({
       videoURL: file.path,
       title: uploadedTitle,
       description: uploadDescription,
       hashtags: hashtagsNew,
       owner: _id
     })
+    const user = await User.findById(_id)
+    user.userVideos.push(newVideo._id)
+    user.save()
+    console.log(user)
     return res.redirect('/')
   } catch (err) {
       console.log('There was an error::', err)
@@ -76,6 +82,13 @@ export const postUpload = async (req, res) => {
 export const deleteVideos = async(req, res) =>{
   const {id} = req.params
   await Video.findByIdAndDelete(id)
+  const videoSelected = await Video.findById(id)
+  if(String(videoSelected.owner) !== req.session.user._id){
+    return res.status(403).redirect("/")
+  }
+  if(!videoSelected){
+    return res.render("404", {pageTitle: "Video not found"})
+  }
   res.redirect('/') 
 }
 
