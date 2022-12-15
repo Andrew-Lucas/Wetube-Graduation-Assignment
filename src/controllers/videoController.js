@@ -106,3 +106,14 @@ export const searchVideo = async (req, res) => {
   }
   res.render("videos/SearchVideos", {pageTitle: "Search Videos", searchedVideos, keyword})
 }
+
+export const registerView = async (req, res)=>{
+  const {id} = req.params
+  const viewedVideo = await Video.findById(id)
+  if(!viewedVideo){
+    return res.sendStatus("404")
+  }
+  viewedVideo.meta.views = viewedVideo.meta.views + 1
+  await viewedVideo.save()
+  return res.sendStatus("200")
+}

@@ -5,6 +5,10 @@ block content
 
   if(ErrorMessage)
     span #{ErrorMessage}
+
+  video#record-preview.hide-video_preview(height=300 width=450)
+  button#record-button Start recording
+  button#ignore-download.hide-video_preview Cancel
   form.edit-profile_form(method="post" enctype="multipart/form-data")
     label(for="videoID") Choose Video
     input(type="file" accept="video/*" id="videoID" name="video" required)
@@ -13,3 +17,6 @@ block content
     input(name="uploadDescription" type="text" placeholder="Description" required minlength="10")
     input(name="hashtagsNew" type="text" placeholder="Hashtag" required)
     input.submit-updated-profile_btn(type="submit", value="Upload Video") 
+
+block scripts 
+  script(src="/static/js/recorder.js") 

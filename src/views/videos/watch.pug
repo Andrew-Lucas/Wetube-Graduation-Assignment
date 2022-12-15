@@ -1,7 +1,7 @@
 extends ../base.pug
 
 block content 
-  div#main-video-screen
+  div#main-video-screen(data-id=videoSelected.id)
     video#video(src="/" + videoSelected.videoURL height="650" width="1200") 
     div#videoControls.videoControls
       div.videoControls__play

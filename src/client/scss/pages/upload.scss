@@ -1,0 +1,11 @@
+@import '../other/_variables';
+@import '../other/_reset';
+@import '../other/_mixins';
+
+.hide-video_preview{
+  display: none;
+}
+
+.show-video_preview{
+  display: contents;
+}

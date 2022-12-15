@@ -108,14 +108,24 @@ const handleMouseLeave = () => {
   controlsTimeout = setTimeout(hideControls, 3000);
 };
 
+const {id} = mainVideoScreen.dataset
+console.log(id)
+const handleAddView = ()=>{
+  fetch(`/api/videos/${id}/view`, {
+    method: "POST",
+  })
+
+  console.log("Video finished")
+}
 
 playBtn.addEventListener("click", handlePlayState)
 muteBtn.addEventListener("click", handleMute)
 volumeRange.addEventListener("input", handleVolumeChange)
 video.addEventListener("loadedmetadata", handleLoadedMetedata)
 video.addEventListener("timeupdate", handleTimeUpdate)
+video.addEventListener("click", handlePlayState)
+video.addEventListener("ended", handleAddView)
 timeLine.addEventListener("input", handleTimeline)
 toogleScreenButton.addEventListener("click", toogleScreenSize)
 mainVideoScreen.addEventListener("mousemove", handleMouseMove);
 mainVideoScreen.addEventListener("mouseleave", handleMouseLeave);
-video.addEventListener("click", handlePlayState)

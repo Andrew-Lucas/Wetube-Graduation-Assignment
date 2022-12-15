@@ -4,10 +4,10 @@ mixin videos(item)
       video.video_preview(src="/" + item.videoURL)
       span.video_info=item.title
       span.video_info Posted by: #{item.owner.username}
+      li #{item.meta.views} Viewers 
 
 
       //-  li #{item.description}
         li #{item.hashtags}
         li Posted At: #{item.DateCreated}
-        li #{item.meta.views} Viewers 
         li #{item.meta.rating} Stars 
