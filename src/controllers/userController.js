@@ -181,17 +181,21 @@ export const postChangePassword = async (req, res)=>{
     const savedUser= await User.findById(_id)
     const correctPassword = await bcrypt.compare(OldPassword, savedUser.password)
     if(!correctPassword){
+      req.flash("error", "Incorrect Password")
       return res.render("users/ChangePassword", {pageTitle: "Edit Password", errors: "The password you entered does not match the previously saved password", OldPassword, NewPassword, ConfirmNew})
     }
     if(NewPassword !== ConfirmNew){
+      req.flash("error", "Incorrect Password")
       return res.render("users/ChangePassword", {pageTitle: "Edit Password", errors: "The new password that you entered does not match the password you confirmed", OldPassword, NewPassword, ConfirmNew})
     }
     savedUser.password = NewPassword
     await savedUser.save()
     req.session.user.password = savedUser.password
+    req.flash("info", "Password updated")
     return res.redirect("/")
   } catch{
     console.log("Password Catch error")
+    req.flash("error", "Server Error")
     return res.status(400).render("users/ChangePassword", {pageTitle: "Edit Password"})
   }
 }

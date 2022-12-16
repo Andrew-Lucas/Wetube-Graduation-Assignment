@@ -8,6 +8,10 @@ html(lang="en")
     link(rel="stylesheet", href="/static/css/styles.css")
     title #{ pageTitle } | Wetube
   body 
+    if messages.error 
+      span=messages.error
+    if messages.info 
+      span=messages.info
     include partials/header.pug
     block header
 

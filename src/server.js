@@ -1,6 +1,7 @@
 import express from 'express'
 import sessions from 'express-session'
 import MongoStore from 'connect-mongo'
+import flash from 'express-flash'
 import morgan from 'morgan'
 import { localsMiddleware } from './middlewares'
 import globalRouter from './routers/globalRouter'
@@ -32,6 +33,7 @@ app.use((req, res, next) => {
   })
 })
 
+app.use(flash())
 app.use(localsMiddleware)
 
 app.use('/avatars', express.static('avatars'))

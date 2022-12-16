@@ -30,6 +30,7 @@ export const postEditVideos = async (req, res) => {
   const { editedTitle, editedDescription, editedHashtag } = req.body
   const videoSelected = await Video.findById(id)
   if(!videoSelected){
+    req.flash("error", "You are not the owner of the video")
     return res.status(404).render("404", {pageTitle: "Video not found"})
   }
   videoSelected.title = editedTitle
@@ -54,11 +55,15 @@ export const seeVideos = async (req, res) => {
 }
 
 export const getUpload = (req, res) => {
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+  res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
   return res.render('videos/upload', { pageTitle: `Upload Video` })
 }
 
 export const postUpload = async (req, res) => {
   // here we are going to add videos on 2023
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+  res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
   const {user: {_id}} = req.session
   const file = req.file
   const { uploadedTitle, uploadDescription, hashtagsNew } = req.body
@@ -86,6 +91,7 @@ export const deleteVideos = async(req, res) =>{
   await Video.findByIdAndDelete(id)
   const videoSelected = await Video.findById(id)
   if(String(videoSelected.owner) !== req.session.user._id){
+    req.flash("error", "You are not the owner of the video")
     return res.status(403).redirect("/")
   }
   if(!videoSelected){
