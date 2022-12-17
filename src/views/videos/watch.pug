@@ -19,6 +19,12 @@ block content
       div
         span#screen-size-btn 
           i.fas.fa-expand
+
+  if loggedIn 
+    h1 Write your comments
+    form#comment-form
+      textarea(cols="30", rows="10") 
+      button Add comments
   
 //-
   br
@@ -50,4 +56,6 @@ block content
     -//
 
 block scripts 
-  script(src="/static/js/VideoPlayer.js") 
+  script(src="/static/js/VideoPlayer.js")
+  if loggedIn 
+    script(src="/static/js/commentSection.js")

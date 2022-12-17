@@ -6,6 +6,7 @@ module.exports = {
     main:'./src/client/js/main.js',
     VideoPlayer:'./src/client/js/VideoPlayer.js',
     recorder:'./src/client/js/recorder.js',
+    commentSection:'./src/client/js/commentSection.js',
   },
   mode: 'development',
   watch: true,

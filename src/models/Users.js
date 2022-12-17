@@ -10,7 +10,8 @@ const userSchema = new mongoose.Schema({
   githubLogin: {type: Boolean, default: false},
   githubID: {type: String, default: ""},
   location: {type: String, trim: true},
-  userVideos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }]
+  userVideos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }],
+  comments: [{type: mongoose.Schema.Types.ObjectId, ref: "Comment"}]
 })
 
 userSchema.pre("save", async function () {
