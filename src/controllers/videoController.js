@@ -1,5 +1,6 @@
 import Video from '../models/Video'
 import User from '../models/Users'
+import Comment from '../models/Comments'
 
 export const handleHome = async (req, res) => {
 /*   const { id } = req.params
@@ -44,7 +45,6 @@ export const seeVideos = async (req, res) => {
   try{
     const { id } = req.params
     const videoSelected = await Video.findById(id).populate("owner")
-    console.log(videoSelected)
     if(!videoSelected){
       return res.status(404).render("404", {pageTitle: "Video not found"})
     }
@@ -121,5 +121,20 @@ export const registerView = async (req, res)=>{
   }
   viewedVideo.meta.views = viewedVideo.meta.views + 1
   await viewedVideo.save()
+  return res.sendStatus("200")
+}
+
+export const addComment = async (req, res)=>{
+  const {session:{user}, body:{text}, params:{id}} = req
+  const commentedVideo = await Video.findById(id)
+  const newComment = await Comment.create({
+    text,
+    owner: user._id,
+    parentVideo: id
+  })
+  if(!commentedVideo){
+    return res.sendStatus("404")
+  }
+  console.log(newComment)
   return res.sendStatus("200")
 }

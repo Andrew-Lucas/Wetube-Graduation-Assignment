@@ -13,7 +13,6 @@ const mainVideoScreen = document.getElementById('main-video-screen')
 const videoControls = document.getElementById('videoControls')
 
 const commentForm = document.getElementById('comment-form')
-const textArea = commentForm.querySelector('textarea')
 
 video.volume = 0.5
 let volumeValue = 0.5
@@ -115,12 +114,10 @@ const handleMouseLeave = () => {
 }
 
 const { id } = mainVideoScreen.dataset
-console.log(id)
 const handleAddView = () => {
   fetch(`/api/videos/${id}/view`, {
     method: 'POST',
   })
-
   console.log('Video finished')
 }
 
