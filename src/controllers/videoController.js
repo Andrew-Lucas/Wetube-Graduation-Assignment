@@ -44,11 +44,11 @@ export const postEditVideos = async (req, res) => {
 export const seeVideos = async (req, res) => {
   try{
     const { id } = req.params
-    const videoSelected = await Video.findById(id).populate("owner")
+    const videoSelected = await Video.findById(id).populate("owner").populate("comments")
     if(!videoSelected){
-      return res.status(404).render("404", {pageTitle: "Video not found"})
+      return res.status(404).render("404", {pageTitle: "Video not found",})
     }
-    return res.render('videos/watch', { pageTitle: `Watching ${videoSelected.title}`, videoSelected })
+    return res.render('videos/watch', { pageTitle: `Watching ${videoSelected.title}`, videoSelected, Comment })
   } catch(err){
     console.log("watch catched error:::", err)
   }
@@ -127,14 +127,26 @@ export const registerView = async (req, res)=>{
 export const addComment = async (req, res)=>{
   const {session:{user}, body:{text}, params:{id}} = req
   const commentedVideo = await Video.findById(id)
+  if(!commentedVideo){
+    return res.sendStatus("404")
+  }
   const newComment = await Comment.create({
     text,
     owner: user._id,
     parentVideo: id
   })
-  if(!commentedVideo){
-    return res.sendStatus("404")
-  }
-  console.log(newComment)
+  commentedVideo.comments.push(newComment._id)
+  commentedVideo.save()
+  return res.status("201").json({newCommentId: newComment._id})
+  /*   console.log(newComment) */
+}
+
+export const deleteComment = async (req, res)=>{
+  console.log("Fetch delete worked")
+  const {id} = req.body
+  console.log(id)
+/*   const commentedVideo = await Video.findById(id) */
+  const commentToDelete = await Comment.findByIdAndDelete(id)
+/*   commentedVideo.save() */
   return res.sendStatus("200")
 }

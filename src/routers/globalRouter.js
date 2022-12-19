@@ -10,4 +10,4 @@ globalRouter.route('/join').all(publicOnlyMiddleware).get(getJoin).post(postJoin
 globalRouter.route('/login').all(publicOnlyMiddleware).get(getLogin).post(postLogin)
 globalRouter.get("/search", searchVideo)
 
-export default globalRouter 
+export default globalRouter

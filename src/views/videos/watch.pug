@@ -25,6 +25,13 @@ block content
     form#comment-form
       textarea(cols="30", rows="10")
       button Add comments
+
+  div.comments-section 
+    ul.comments-ul
+        each comment in videoSelected.comments.reverse()
+          li(data-id=comment.id)
+            span=comment.text
+            button#delete-comment ❌
   
 //-
   br
