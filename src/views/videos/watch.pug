@@ -22,17 +22,24 @@ block content
 
   if loggedIn 
     h1 Write your comments
-    form#comment-form
+    form#comment-form(data-user=userId)
       textarea(cols="30", rows="10")
       button Add comments
 
   div.comments-section 
     ul.comments-ul
         each comment in videoSelected.comments.reverse()
-          li(data-id=comment.id)
-            span=comment.text
-            button#delete-comment ❌
+            li(data-id=comment.id)
+              span#comment-span(data-owner=newOwner)=comment.text
+              if commentOwner === userID
+                button#delete-comment ❌
   
+  small  #{videoSelected.meta.views} #{videoSelected.meta.views === 1 ? "View" : "Views"}
+
+  if String(videoSelected.owner._id) === String(user._id)
+    a(href=`${videoSelected.id}/edit`) Edit &rarr;
+    br
+    a(href=`${videoSelected.id}/delete`) Delete video &rarr; 
 //-
   br
   small=videoSelected.title
@@ -53,13 +60,8 @@ block content
   br
   small  #{videoSelected.meta.rating} Stars
   br
-  small  #{videoSelected.meta.views} #{videoSelected.meta.views === 1 ? "View" : "Views"}
   br
 
-  if String(videoSelected.owner._id) === String(user._id)
-    a(href=`${videoSelected.id}/edit`) Edit &rarr;
-    br
-    a(href=`${videoSelected.id}/delete`) Delete video &rarr; 
     -//
 
 block scripts 

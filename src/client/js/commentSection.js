@@ -3,11 +3,16 @@ import fetch from "node-fetch"
 const mainVideoScreen = document.getElementById('main-video-screen')
 const commentForm = document.getElementById("comment-form")
 
+const commentSpan = document.querySelector("#comment-span")
+
 const deleteCommentBtn = document.getElementById("delete-comment")
 
 const deleteComment = async (event)=>{
   const item = event.target.parentElement
+  const item1 = event
   const {id} = item.dataset
+  console.dir(item1)
+  item.remove()
   const videoId = mainVideoScreen.dataset.id
   const commentToDelete = await fetch(`/api/videos/${videoId}/comment/delete`, {
   method: 'DELETE',
@@ -18,22 +23,27 @@ const deleteComment = async (event)=>{
     id,
   }),
 })
-  item.remove()
 }
 
-
-if(deleteCommentBtn){
-  deleteCommentBtn.addEventListener("click", deleteComment)
-}
-
-
-const showComments = (text, newCommentId)=>{
+const showComments = (text, newCommentId, newOwner)=>{
   const commentsSection = document.querySelector(".comments-section")
   const commentsUl = commentsSection.querySelector(".comments-ul")
   const commentsLi = document.createElement("li")
+  if(!commentsLi){
+    const commentsLi = document.createElement("span")
+    commentsLi.dataset.id = ""
+  }
   commentsLi.dataset.id = newCommentId
+  
   const commentsSpan = document.createElement("span")
+  commentsSpan.id = "comment-span"
+  if(!commentsSpan){
+    const commentsSpan = document.createElement("span")
+    commentsSpan.dataset.owner = ""
+  }
+  commentSpan.dataset.owner = newOwner
   commentsSpan.innerText = text
+
   const deleteBtn = document.createElement("button")
   deleteBtn.innerText = "❌"
   commentsLi.appendChild(commentsSpan)
@@ -43,6 +53,9 @@ const showComments = (text, newCommentId)=>{
   deleteBtn.addEventListener("click", deleteComment)
 }
 
+if(deleteCommentBtn){
+  deleteCommentBtn.addEventListener("click", deleteComment)
+}
 
 const submitCommentForm = async (submitEvent)=>{
   const textArea = commentForm.querySelector("textarea")
@@ -62,9 +75,9 @@ const submitCommentForm = async (submitEvent)=>{
       text: trimedText,
     }),
   })
-  const {newCommentId} = await commentResponse.json()
+  const {newCommentId, newOwner} = await commentResponse.json()
   if(commentResponse.status === 201){
-    showComments(text, newCommentId)
+    showComments(text, newCommentId, newOwner)
   }
   textArea.value = ""
 }
