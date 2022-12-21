@@ -58,12 +58,7 @@ export const seeVideos = async (req, res) => {
       return res.status(404).render('404', { pageTitle: 'Video not found' })
     }
 
-    /*     const comment = await Comment.findById(commentId) */
-    /*     console.log(commentToDelete) */
-
     const commentOwner = String(comments.owner) || ""
-    console.log(userID)
-    console.log(commentOwner)
 
     return res.render('videos/watch', {
       pageTitle: `Watching ${videoSelected.title}`,
@@ -104,7 +99,6 @@ export const postUpload = async (req, res) => {
     const user = await User.findById(_id)
     user.userVideos.push(newVideo._id)
     user.save()
-    console.log(user)
     return res.redirect('/')
   } catch (err) {
     console.log('There was an error::', err)
@@ -179,7 +173,6 @@ export const addComment = async (req, res) => {
   comments = newComment
   commentedVideo.save()
   return res.status('201').json({ newCommentId: newComment._id, newOwner: newComment.owner })
-  /*   console.log(newComment) */
 }
 
 export const deleteComment = async (req, res) => {

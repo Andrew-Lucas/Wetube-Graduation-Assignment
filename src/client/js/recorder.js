@@ -26,9 +26,6 @@ const downloadRecording = async ()=>{
   const mp4File = ffmpeg.FS("readFile", "output.mp4")
   const thumbFile = ffmpeg.FS("readFile", "thumbnail.jpg")
 
-  console.log(mp4File)
-  console.log(mp4File.buffer)
-
  const mp4Blob = new Blob([mp4File.buffer], {type: "video/mp4"})
  const thumbBlob = new Blob([thumbFile.buffer], {type: "image/jpg"})
 

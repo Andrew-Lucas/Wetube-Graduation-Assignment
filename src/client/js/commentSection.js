@@ -9,9 +9,7 @@ const deleteCommentBtn = document.getElementById("delete-comment")
 
 const deleteComment = async (event)=>{
   const item = event.target.parentElement
-  const item1 = event
   const {id} = item.dataset
-  console.dir(item1)
   item.remove()
   const videoId = mainVideoScreen.dataset.id
   const commentToDelete = await fetch(`/api/videos/${videoId}/comment/delete`, {
