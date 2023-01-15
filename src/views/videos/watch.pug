@@ -40,31 +40,8 @@ block content
     a(href=`${videoSelected.id}/edit`) Edit &rarr;
     br
     a(href=`${videoSelected.id}/delete`) Delete video &rarr; 
-//-
-  br
-  small=videoSelected.title
-  br
-  small Created by: 
-    a(href=`/user/${videoSelected.owner.id}`) #{videoSelected.owner.username}
-  br
-
-  p 
-    big #{videoSelected.description} 
-
-  ul 
-    b Hashtags
-    each hashtag in videoSelected.hashtags
-      li  #{hashtag}
-
-  span Posted at: #{videoSelected.DateCreated} 
-  br
-  small  #{videoSelected.meta.rating} Stars
-  br
-  br
-
-    -//
 
 block scripts 
-  script(src="/static/js/VideoPlayer.js")
+  script(src="/assets/js/VideoPlayer.js")
   if loggedIn 
-    script(src="/static/js/commentSection.js")
+    script(src="/assets/js/commentSection.js")

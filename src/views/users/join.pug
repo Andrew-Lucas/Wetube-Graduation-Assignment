@@ -1,0 +1,17 @@
+extends ../base
+
+block content 
+  h1.forms-heading Create an account
+  if errors
+    span #{errors}
+  form.edit-profile_form(method="POST")
+    input(name="newName" type="text" placeholder="Your name" required value=`${newName===undefined ? "" :`${newName}`}`)
+    input(name="newUsername" type="text" placeholder="Username" required value=`${newUsername===undefined ? "" :`${newUsername}`}`)
+    input(name="newEmail" type="email" placeholder="E-mail" required value=`${newEmail===undefined ? "" :`${newEmail}`}`)
+    input(name="newPassword" type="password" placeholder="Password" required value=`${newPassword===undefined ? "" :`${newPassword}`}`)
+    input(name="confirmNewPassword" type="password" placeholder="Confirm Password" required value=`${confirmNewPassword===undefined ? "" :`${confirmNewPassword}`}`)
+    input(name="newLocation" type="text" placeholder="Your Location" value=`${newLocation===undefined ? "" :`${newLocation}`}`)
+    input.submit-updated-profile_btn(type="submit" value="Create Account")
+
+    span.change-password-link.already-have-account Already have an account? 
+      a(href="/login") Login &rarr;

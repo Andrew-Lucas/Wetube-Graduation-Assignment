@@ -8,11 +8,8 @@
   },
   "scripts": {
     "start": "node build/init.js",
-    "build": "npm run build:server && npm run build:assets",
-    "build:server": "babel src -d build",
-    "build:assets": "webpack --mode=development",
     "dev:server": "nodemon",
-    "dev:assets": "webpack --mode=development -w"
+    "dev:webpack": "webpack --mode=development -w"
   },
   "author": "Andrew Lucas",
   "license": "MIT",

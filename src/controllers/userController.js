@@ -5,59 +5,98 @@ import bcrypt from "bcrypt"
 import { verify } from 'gulp-cli/lib/shared/cli-options'
 
 export const getJoin = (req, res) => {
-  res.render('join', {pageTitle: "Create Account"})
+  res.render('users/join', {pageTitle: "Create Account"})
 }
 
 export const postJoin = async (req, res) => {
-  const {name, username, email, password, password2, location} = req.body
-  const exists = await User.exists({username, email})
-  if(password !== password2){
-    return res.status(400).render('Join', {pageTitle: "Create Account", errors: "The passwords are not matched", name, username, email, password, password2, location})
-  }
-  if(exists){
-    return res.status(400).render('Join', {pageTitle: "Create Account", errors: "This is an account already exists", name, username, email, password, password2, location})
-  }
-  try{
-    await User.create({
-      name,
-      username,
-      email,
-      password,
-      location
+  const { newName, newUsername, newEmail, newPassword, confirmNewPassword, newLocation} = req.body
+
+  try {
+    const accounts = await User.find({})
+    const existingAccount = accounts.find(
+      (account) =>
+        account.username === newUsername && account.email === newEmail
+    )
+    if (existingAccount) {
+      return res.status(400).render('users/join', {
+        errors: 'This account exists, loggin instead', newName, newUsername, newEmail, newPassword, confirmNewPassword, newLocation,
+      })
+    }
+
+    const usernameExists = await User.findOne({ username: newUsername })
+    if (usernameExists) {
+      return res.status(400).render('users/join', {
+        errors: 'This username is not available, try using another username', newName, newUsername, newEmail, newPassword, confirmNewPassword, newLocation,
+      })
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      return res
+        .status(400)
+        .render('users/join', { errors: 'Your passwords are unmatched', newName, newUsername, newEmail, newPassword, confirmNewPassword, newLocation, })
+    }
+    const createdUser = await User.create({
+      name: newName,
+      username: newUsername,
+      email: newEmail,
+      password: newPassword,
+      location: newLocation,
     })
-    res.redirect("login") 
-  } catch(err){
-    console.log('There was an error')
-    console.log(err/* ._message */)
-    return res.status(400).render('Join', {pageTitle: "Create Account", errors: "There is already an account with the same email, Login with Password", name, username, email, password, password2, location})
+    return res.redirect('/login')
+  } catch (err) {
+    console.log(err)
+    return res
+      .status(400)
+      .render('users/join', { errors: 'An error occured with the server' })
   }
 }
-
 
 
 export const getLogin = (req, res) => {
-  return res.render("login", {pageTitle: `Login`})
+  return res.render("users/login", {pageTitle: `Login`})
 }
 
+
 export const postLogin = async (req, res) => {
+  const {username, email, password} = req.body
   try{
-      const {username, email, password} = req.body
-      const existingUser = await User.findOne({username, email})
-      if (!existingUser){
-        return res.status(400).render("login", {pageTitle: `Login`,errors: "This account does not exist!", username, email, password})
-      }
-      const correctPassword = await bcrypt.compare(password, existingUser.password)
-      if(!correctPassword){
-        return res.status(400).render("login", {pageTitle: `Login`,errors: "The password is incorrect", username, email, password})
-      }
+    const userExists = await User.findOne({ username })
+    if (!userExists) {
+      return res.status(400).render('users/login', {
+        errors: 'There is no account with this username',
+        username,
+        email,
+        password,
+      })
+    }
+    if (userExists.email !== email) {
+      return res.status(400).render('users/login', {
+        errors:
+          'This account does not exist, Create an account first then login',
+        username,
+        email,
+        password,
+      })
+    }
+    const correctPassword = await bcrypt.compare(password, userExists.password)
+    if (!correctPassword) {
+      return res.status(400).render('users/login', {
+        pageTitle: `Login`,
+        errors: 'The password is incorrect',
+        username,
+        email,
+        password,
+      })
+    }
       req.session.loggedIn = true
-      req.session.user = existingUser
+      req.session.user = userExists
       return res.redirect("/")
   } catch(err){
-      console.log('There was an error')
-      return res.render("login", {pageTitle: `Login`, errors: err._message}) 
+      console.log('There was an error', err)
+      return res.render("users/login", {pageTitle: `Login`, errors: "An error occured with the server"}) 
   } 
 }
+
 
 export const startGithubLogin = (req, res)=>{
   const baseUrl = "https://github.com/login/oauth/authorize?"
@@ -69,6 +108,7 @@ export const startGithubLogin = (req, res)=>{
   const finalUrl = `${baseUrl}${params}`
   return res.redirect(finalUrl)
 }
+
 
 export const finishedGithubLogin = async (req, res)=>{
   const baseUrl = "https://github.com/login/oauth/access_token"
@@ -101,18 +141,19 @@ export const finishedGithubLogin = async (req, res)=>{
       }
     })
     const emailReqJson = await emailReq.json()
+    console.log(userReqJson)
+    console.log(emailReqJson)
     const gitEmails = emailReqJson.find((email)=> email.verified === true && email.primary === true)
     if(!gitEmails){
       return res.redirect("/login")
     }
 
-    const existingUser = await User.findOne({/* username:userReqJson.login,  */email: gitEmails.email})
+    const existingUser = await User.findOne({email: gitEmails.email})
     if(existingUser){
       req.session.loggedIn = true
       req.session.user = existingUser
       return res.redirect("/")
     } else{
-      /* try{ */
         await User.create({
           name: userReqJson.name,
           avatarURL: userReqJson.avatar_url,
@@ -127,9 +168,6 @@ export const finishedGithubLogin = async (req, res)=>{
         const gitUser = await User.findOne({username: userReqJson.login})
         req.session.user = gitUser
         return res.redirect("/") 
-      /* } catch(err){
-        return res.render("/login", {pageTitle: `Login`, errors: "There is already an account with the same email, Login with Password"}) 
-      } */
     }
   } 
   else{
@@ -137,19 +175,28 @@ export const finishedGithubLogin = async (req, res)=>{
   }
 }
 
+
+export const viewProfile = async (req, res) => {
+  const {id} = req.params
+  const selectedUser = await User.findById(id).populate("userVideos")
+  if(!selectedUser){
+    return res.status(404).render("404", {pageTitle: "User not found"})
+  }
+  return res.render('users/viewProfile', {pageTitle: `${selectedUser.name}`, selectedUser})
+}
+
+
 export const getEditProfile = (req, res)=>{
   return res.render("users/EditProfile", {pageTitle: "Edit Profile"})
 }
+
 
 export const postEditProfile = async (req, res)=>{
   const {session:{
     user:{_id, avatarURL}
   }, body:{editName, editUsername, editLocation,}, file} = req
     try{
-      const existingUsername = await User.findOne({_id, username: editUsername})
-      if(existingUsername){
-/*         return res.status(400).render('users/EditProfile', {pageTitle: "Edit Profile", errors: "There is already an account with the same Username, try using a different Username"}) */
-      } 
+      const existingUsername = await User.find()
       const updatedUser = await User.findByIdAndUpdate(_id, {
         name: editName,
         avatarURL: file ? file.path : avatarURL,
@@ -200,20 +247,8 @@ export const postChangePassword = async (req, res)=>{
   }
 }
 
-export const seeUser = async (req, res) => {
-  const {id} = req.params
-  const user = await User.findById(id).populate("userVideos")
-  if(!user){
-    return res.status(404).render("404", {pageTitle: "User not found"})
-  }
-  return res.render('users/MyProfile', {pageTitle: `${user.name}`, user})
-}
-
 export const logout = (req, res) => {
   req.session.destroy()
   res.redirect('/')
 }
-
-export const editUser = (req, res) => res.send('Edit Your user profile')
-export const deleteUser = (req, res) => res.send('Delete your user profile')
  

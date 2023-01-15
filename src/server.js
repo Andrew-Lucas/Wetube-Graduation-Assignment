@@ -1,3 +1,9 @@
+import dotenv from "dotenv/config"
+import "./db"
+import "./models/Video"
+import "./models/Users"
+import "./models/Comments"
+
 import express from 'express'
 import sessions from 'express-session'
 import MongoStore from 'connect-mongo'
@@ -11,6 +17,7 @@ import apiRouter from './routers/apiRouter'
 
 const logger = morgan('dev')
 const app = express()
+const PORT = 7000
 
 app.use(logger)
 
@@ -38,11 +45,12 @@ app.use(flash())
 app.use(localsMiddleware)
 
 app.use('/avatars', express.static('avatars'))
-app.use('/videos', express.static('videos'))
-app.use('/static', express.static('assets'))
+app.use('/AllVideos', express.static('AllVideos'))
+app.use('/assets', express.static('assets'))
 app.use('/', globalRouter)
 app.use('/user', userRouter)
 app.use('/videos', videosRouter)
 app.use('/api', apiRouter)
+  
 
-export default app
+app.listen(PORT, ()=> console.log(`✅Server listening from http://localhost:${PORT}`))

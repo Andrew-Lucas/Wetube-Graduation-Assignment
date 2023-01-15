@@ -3,14 +3,14 @@ include ../mixins/video
 
 block content 
   div.user-profile 
-    a(href=`/user/EditMyProfile`)
-      if user.avatarURL && !user.githubLogin
+    a(href=`/user/${selectedUser._id}/edit`) Edit User 
+      if selectedUser.avatarURL && !selectedUser.githubLogin
         img.profile-picture(src="/" + user.avatarURL)
       else 
          i.fa-solid.fa-user.fa-user_my-profile
-      h1 #{user.username}
+      h1 #{selectedUser.username}
 
   main.home-body
     div.main-videos-holder.my-profile_main-videos-holder
-      each video in user.userVideos
+      each video in selectedUser.userVideos
         +videos(video)

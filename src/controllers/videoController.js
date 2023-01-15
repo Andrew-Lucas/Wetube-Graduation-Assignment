@@ -3,75 +3,17 @@ import User from '../models/Users'
 import Comment from '../models/Comments'
 
 export const handleHome = async (req, res) => {
-  /*   const { id } = req.params
-  const videoSelected = await Video.findById(id).populate("owner") */
   try {
     const Videos = await Video.find({})
       .sort({ DateCreated: 'desc' })
       .populate('owner')
-    res.render('home', { pageTitle: 'Home Page', Videos /* videoSelected */ })
+    res.render('index', { pageTitle: 'Home Page', Videos })
   } catch (err) {
     console.log('❌ DB ERROR::', err)
     res.send('<h1>Sorry, an error occured!!!</h1>')
   }
 }
 
-export const getEditVideos = async (req, res) => {
-  const { id } = req.params
-  const videoSelected = await Video.findById(id)
-  if (String(videoSelected.owner) !== req.session.user._id) {
-    return res.status(403).redirect('/')
-  }
-  if (!videoSelected) {
-    return res.render('404', { pageTitle: 'Video not found' })
-  }
-  return res.render('videos/edit', {
-    pageTitle: `Editing ${videoSelected.title}`,
-    videoSelected,
-  })
-}
-
-export const postEditVideos = async (req, res) => {
-  const { id } = req.params
-  const { editedTitle, editedDescription, editedHashtag } = req.body
-  const videoSelected = await Video.findById(id)
-  if (!videoSelected) {
-    req.flash('error', 'You are not the owner of the video')
-    return res.status(404).render('404', { pageTitle: 'Video not found' })
-  }
-  videoSelected.title = editedTitle
-  videoSelected.description = editedDescription
-  videoSelected.hashtags = editedHashtag
-  await videoSelected.save()
-  return res.redirect(`/videos/${id}`)
-}
-
-let comments = comments || {}
-export const seeVideos = async (req, res) => {
-  try {
-    const { id } = req.params
-    const userID = req.session.user._id
-    const videoSelected = await Video.findById(id)
-      .populate('owner')
-      .populate('comments')
-    if (!videoSelected) {
-      return res.status(404).render('404', { pageTitle: 'Video not found' })
-    }
-
-    const commentOwner = String(comments.owner) || ""
-
-    return res.render('videos/watch', {
-      pageTitle: `Watching ${videoSelected.title}`,
-      videoSelected,
-      userID,
-      newCommentId: comments._id, 
-      commentOwner,
-      newOwner: comments.owner
-    })
-  } catch (err) {
-    console.log('watch catched error:::', err)
-  }
-}
 
 export const getUpload = (req, res) => {
   res.setHeader('Cross-Origin-Opener-Policy', 'same-origin')
@@ -80,7 +22,6 @@ export const getUpload = (req, res) => {
 }
 
 export const postUpload = async (req, res) => {
-  // here we are going to add videos on 2023
   res.setHeader('Cross-Origin-Opener-Policy', 'same-origin')
   res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp')
   const {
@@ -110,21 +51,6 @@ export const postUpload = async (req, res) => {
   }
 }
 
-export const deleteVideos = async (req, res) => {
-  const { id } = req.params
-  await Video.findByIdAndDelete(id)
-  const videoSelected = await Video.findById(id)
-  console.log(videoSelected)
-  if (String(videoSelected.owner) !== req.session.user._id) {
-    req.flash('error', 'You are not the owner of the video')
-    return res.status(403).redirect('/')
-  }
-  if (!videoSelected) {
-    return res.render('404', { pageTitle: 'Video not found' })
-  }
-  res.redirect('/')
-}
-
 export const searchVideo = async (req, res) => {
   const { keyword } = req.query
   let searchedVideos = []
@@ -142,6 +68,35 @@ export const searchVideo = async (req, res) => {
   })
 }
 
+
+let comments = comments || {}
+export const watchVideo = async (req, res) => {
+  try {
+    const { id } = req.params
+    const userID = req.session.user._id
+    const videoSelected = await Video.findById(id)
+      .populate('owner')
+      .populate('comments')
+    if (!videoSelected) {
+      return res.status(404).render('404', { pageTitle: 'Video not found' })
+    }
+
+    const commentOwner = String(comments.owner) || ""
+
+    return res.render('videos/watch', {
+      pageTitle: `Watching ${videoSelected.title}`,
+      videoSelected,
+      userID,
+      newCommentId: comments._id, 
+      commentOwner,
+      newOwner: comments.owner
+    })
+  } catch (err) {
+    console.log('watch catched error:::', err)
+  }
+}
+
+
 export const registerView = async (req, res) => {
   const { id } = req.params
   const viewedVideo = await Video.findById(id)
@@ -152,6 +107,39 @@ export const registerView = async (req, res) => {
   await viewedVideo.save()
   return res.sendStatus('200')
 }
+
+
+export const getEditVideos = async (req, res) => {
+  const { id } = req.params
+  const videoSelected = await Video.findById(id)
+  if (String(videoSelected.owner) !== req.session.user._id) {
+    return res.status(403).redirect('/')
+  }
+  if (!videoSelected) {
+    return res.render('404', { pageTitle: 'Video not found' })
+  }
+  return res.render('videos/edit', {
+    pageTitle: `Editing ${videoSelected.title}`,
+    videoSelected,
+  })
+}
+
+
+export const postEditVideos = async (req, res) => {
+  const { id } = req.params
+  const { editedTitle, editedDescription, editedHashtag } = req.body
+  const videoSelected = await Video.findById(id)
+  if (!videoSelected) {
+    req.flash('error', 'You are not the owner of the video')
+    return res.status(404).render('404', { pageTitle: 'Video not found' })
+  }
+  videoSelected.title = editedTitle
+  videoSelected.description = editedDescription
+  videoSelected.hashtags = editedHashtag
+  await videoSelected.save()
+  return res.redirect(`/videos/${id}`)
+}
+
 
 export const addComment = async (req, res) => {
   const {
@@ -188,8 +176,22 @@ export const deleteComment = async (req, res) => {
     return res.sendStatus('400')
   }
   const commentToDelete = await Comment.findByIdAndDelete(id)
-
-  /*   const commentedVideo = await Video.findById(id) */
-  /*   commentedVideo.save() */
   return res.sendStatus('200')
 }
+
+
+export const deleteVideos = async (req, res) => {
+  const { id } = req.params
+  const videoSelected = await Video.findById(id)
+  console.log(videoSelected)
+  if (String(videoSelected.owner) !== req.session.user._id) {
+    req.flash('error', 'You are not the owner of the video')
+    return res.status(403).redirect('/')
+  }
+  if (!videoSelected) {
+    return res.render('404', { pageTitle: 'Video not found' })
+  }
+  await Video.findByIdAndDelete(id)
+  res.redirect('/')
+}
+

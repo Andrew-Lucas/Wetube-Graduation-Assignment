@@ -1,15 +1,16 @@
 import express from 'express'
-import {protectedMiddleware, publicOnlyMiddleware, avatarUpload} from "../middlewares"
-import { deleteUser, getEditProfile, postEditProfile, getChangePassword, postChangePassword, logout, seeUser, startGithubLogin, finishedGithubLogin } from '../controllers/userController'
+import {loggedInOnly, guestsOnly, avatarUpload} from "../middlewares"
+import {startGithubLogin, finishedGithubLogin, viewProfile, getEditProfile, postEditProfile, getChangePassword, postChangePassword, logout} from "../controllers/userController"
+
 const userRouter = express.Router()
 
-userRouter.get("/logout", protectedMiddleware, logout)
-userRouter.route('/EditMyProfile').all(protectedMiddleware).get(getEditProfile).post(avatarUpload.single("avatar"), postEditProfile)
-userRouter.route('/EditMyProfile/ChangePassword').all(protectedMiddleware).get(getChangePassword).post(postChangePassword)
-userRouter.get("/github/start", publicOnlyMiddleware, startGithubLogin)
-userRouter.get("/github/finished", publicOnlyMiddleware, finishedGithubLogin) 
-userRouter.get('/delete',protectedMiddleware, deleteUser)
-userRouter.get('/:id',protectedMiddleware, seeUser)
+userRouter.get("/github/start", guestsOnly, startGithubLogin)
+userRouter.get("/github/finished", guestsOnly, finishedGithubLogin) 
+userRouter.get('/:id([0-9a-z]{24})',loggedInOnly, viewProfile)
+userRouter.route('/:id([0-9a-z]{24})/edit').all(loggedInOnly).get(getEditProfile).post(avatarUpload.single("avatar"), postEditProfile)
+userRouter.route('/EditMyProfile/ChangePassword').all(loggedInOnly).get(getChangePassword).post(postChangePassword)
+userRouter.get("/:id([0-9a-z]{24})/logout", loggedInOnly, logout)
+
 
 export default userRouter
 

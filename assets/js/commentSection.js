@@ -14,9 +14,9 @@
 /*!********************************************!*\
   !*** ./node_modules/node-fetch/browser.js ***!
   \********************************************/
-/***/ ((module, exports) => {
+/***/ ((module, exports, __webpack_require__) => {
 
-eval("\n\n// ref: https://github.com/tc39/proposal-global\nvar getGlobal = function () {\n  // the only reliable means to get the global object is\n  // `Function('return this')()`\n  // However, this causes CSP violations in Chrome apps.\n  if (typeof self !== 'undefined') {\n    return self;\n  }\n  if (typeof window !== 'undefined') {\n    return window;\n  }\n  if (typeof global !== 'undefined') {\n    return global;\n  }\n  throw new Error('unable to locate global object');\n};\nvar global = getGlobal();\nmodule.exports = exports = global.fetch;\n\n// Needed for TypeScript and Webpack.\nif (global.fetch) {\n  exports[\"default\"] = global.fetch.bind(global);\n}\nexports.Headers = global.Headers;\nexports.Request = global.Request;\nexports.Response = global.Response;\n\n//# sourceURL=webpack://wetube/./node_modules/node-fetch/browser.js?");
+eval("\n\n// ref: https://github.com/tc39/proposal-global\nvar getGlobal = function () {\n  // the only reliable means to get the global object is\n  // `Function('return this')()`\n  // However, this causes CSP violations in Chrome apps.\n  if (typeof self !== 'undefined') {\n    return self;\n  }\n  if (typeof window !== 'undefined') {\n    return window;\n  }\n  if (typeof __webpack_require__.g !== 'undefined') {\n    return __webpack_require__.g;\n  }\n  throw new Error('unable to locate global object');\n};\nvar globalObject = getGlobal();\nmodule.exports = exports = globalObject.fetch;\n\n// Needed for TypeScript and Webpack.\nif (globalObject.fetch) {\n  exports[\"default\"] = globalObject.fetch.bind(__webpack_require__.g);\n}\nexports.Headers = globalObject.Headers;\nexports.Request = globalObject.Request;\nexports.Response = globalObject.Response;\n\n//# sourceURL=webpack://wetube/./node_modules/node-fetch/browser.js?");
 
 /***/ }),
 
@@ -79,6 +79,18 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var node
 /******/ 				}
 /******/ 			}
 /******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/global */
+/******/ 	(() => {
+/******/ 		__webpack_require__.g = (function() {
+/******/ 			if (typeof globalThis === 'object') return globalThis;
+/******/ 			try {
+/******/ 				return this || new Function('return this')();
+/******/ 			} catch (e) {
+/******/ 				if (typeof window === 'object') return window;
+/******/ 			}
+/******/ 		})();
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */

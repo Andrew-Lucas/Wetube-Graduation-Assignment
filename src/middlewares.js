@@ -3,26 +3,25 @@ import multer from 'multer'
 export const localsMiddleware = (req, res, next) => {
   res.locals = req.session
   res.locals.user = req.session.user || {}
-  /*   console.log(res.locals) */
+    console.log(res.locals.user)
   next()
 }
 
-export const protectedMiddleware = (req, res, next) => {
-  if (req.session.loggedIn) {
+export const loggedInOnly = (req, res, next)=>{
+  if(!req.session.loggedIn){
+    console.log("For logged in users only")
+    return res.redirect("/login")
+  } else{
     next()
-  } else {
-    // Redirect to login
-    req.flash("error", "Not authorized")
-    return res.redirect('/login')
   }
 }
 
-export const publicOnlyMiddleware = (req, res, next) => {
-  if (!req.session.loggedIn) {
+export const guestsOnly = (req, res, next)=>{
+  if(req.session.loggedIn){
+    console.log("For guests only")
+    return res.redirect("/")
+  } else{
     next()
-  } else {
-    req.flash("error", "Users are not allowed to login twice")
-    return res.redirect('/')
   }
 }
 
@@ -30,4 +29,4 @@ export const avatarUpload = multer({ dest: 'avatars/', limits:{
   fileSize: 3000000,
 } })
 
-export const videoUpload = multer({ dest: 'videos/' })
+export const videoUpload = multer({ dest: 'AllVideos/' })
