@@ -194,4 +194,3 @@ export const deleteVideos = async (req, res) => {
   await Video.findByIdAndDelete(id)
   res.redirect('/')
 }
-
