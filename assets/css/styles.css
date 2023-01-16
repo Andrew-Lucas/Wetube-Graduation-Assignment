@@ -257,6 +257,68 @@ table {
   font-size: 2vmin;
 }
 
+#comment-form {
+  margin-top: 3%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+#comment-form textarea {
+  height: 5vmin !important;
+  max-height: 7vmin;
+  width: 30%;
+  background-color: #0F0F0F;
+  border: none;
+  resize: vertical;
+  border-bottom: solid 1px gray;
+  outline: none;
+  color: gainsboro;
+  font-size: 2.7vmin;
+  padding: 1.7vmin;
+}
+#comment-form textarea::placeholder {
+  font-size: 3vmin !important;
+  color: lightgrey !important;
+}
+#comment-form button {
+  padding: 1.5vmin 2vmin;
+  font-size: 1.7vmin;
+  border-radius: 4vmin;
+  background-color: #65B8FF;
+  border: none;
+  margin-left: 1%;
+}
+
+.comments-section {
+  margin: auto 0%;
+  /*   background-color: red; */
+  margin: auto 0;
+  margin-top: 1%;
+  display: flex;
+  justify-content: center;
+}
+.comments-section .comments-ul {
+  display: flex;
+  flex-direction: column;
+  margin-left: -10vmin;
+}
+.comments-section .comments-ul .comments-li {
+  margin-top: 1vmin;
+  width: 60vmin;
+  height: 7vmin;
+  display: flex;
+  justify-content: space-between;
+}
+.comments-section .comments-ul .comments-li #delete-comment {
+  background-color: #0F0F0F;
+  border: none;
+  height: 4vmin;
+  border-radius: 1vmin;
+}
+.comments-section .comments-ul .comments-li #delete-comment:hover {
+  background-color: rgb(58, 58, 58);
+}
+
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)

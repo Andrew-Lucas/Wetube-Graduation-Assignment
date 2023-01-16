@@ -3,7 +3,7 @@ import multer from 'multer'
 export const localsMiddleware = (req, res, next) => {
   res.locals = req.session
   res.locals.user = req.session.user || {}
-    console.log(res.locals.user)
+/*   console.log(res.locals.user) */
   next()
 }
 

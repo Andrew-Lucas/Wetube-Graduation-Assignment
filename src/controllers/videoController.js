@@ -14,7 +14,6 @@ export const handleHome = async (req, res) => {
   }
 }
 
-
 export const getUpload = (req, res) => {
   res.setHeader('Cross-Origin-Opener-Policy', 'same-origin')
   res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp')
@@ -68,7 +67,6 @@ export const searchVideo = async (req, res) => {
   })
 }
 
-
 let comments = comments || {}
 export const watchVideo = async (req, res) => {
   try {
@@ -81,21 +79,25 @@ export const watchVideo = async (req, res) => {
       return res.status(404).render('404', { pageTitle: 'Video not found' })
     }
 
-    const commentOwner = String(comments.owner) || ""
+    comments = videoSelected.comments
+    const userComments = comments.filter(
+      (comment) => String(comment.owner) === String(userID)
+    )
+
+    
 
     return res.render('videos/watch', {
       pageTitle: `Watching ${videoSelected.title}`,
       videoSelected,
       userID,
-      newCommentId: comments._id, 
-      commentOwner,
-      newOwner: comments.owner
+      newCommentId: comments._id,
+      userComments,
+      newOwner: comments.owner,
     })
   } catch (err) {
     console.log('watch catched error:::', err)
   }
 }
-
 
 export const registerView = async (req, res) => {
   const { id } = req.params
@@ -107,7 +109,6 @@ export const registerView = async (req, res) => {
   await viewedVideo.save()
   return res.sendStatus('200')
 }
-
 
 export const getEditVideos = async (req, res) => {
   const { id } = req.params
@@ -124,7 +125,6 @@ export const getEditVideos = async (req, res) => {
   })
 }
 
-
 export const postEditVideos = async (req, res) => {
   const { id } = req.params
   const { editedTitle, editedDescription, editedHashtag } = req.body
@@ -139,7 +139,6 @@ export const postEditVideos = async (req, res) => {
   await videoSelected.save()
   return res.redirect(`/videos/${id}`)
 }
-
 
 export const addComment = async (req, res) => {
   const {
@@ -160,16 +159,20 @@ export const addComment = async (req, res) => {
   comments = {}
   comments = newComment
   commentedVideo.save()
-  return res.status('201').json({ newCommentId: newComment._id, newOwner: newComment.owner })
+  /*   const allComments = await Comment.find()
+  console.log("allComments", allComments)
+
+  const eachComment = allComments.find(comment => comment)
+  console.log("eachComment", eachComment) */
+  return res
+    .status('201')
+    .json({ newCommentId: newComment._id, newOwner: newComment.owner })
 }
 
 export const deleteComment = async (req, res) => {
-  console.log('Fetch delete worked')
   const { id } = req.body
   const videoId = req.params
   const comment = await Comment.findById(id)
-  console.log("session::", String(req.session.user._id))
-  console.log("owner::", String(comment.owner))
   if (String(req.session.user._id) !== String(comment.owner)) {
     req.flash('error', 'You are not the owner of the comment')
     console.log('You are not the owner of the comment')
@@ -179,11 +182,9 @@ export const deleteComment = async (req, res) => {
   return res.sendStatus('200')
 }
 
-
 export const deleteVideos = async (req, res) => {
   const { id } = req.params
   const videoSelected = await Video.findById(id)
-  console.log(videoSelected)
   if (String(videoSelected.owner) !== req.session.user._id) {
     req.flash('error', 'You are not the owner of the video')
     return res.status(403).redirect('/')
@@ -191,6 +192,10 @@ export const deleteVideos = async (req, res) => {
   if (!videoSelected) {
     return res.render('404', { pageTitle: 'Video not found' })
   }
+  const videoComments = await videoSelected.comments.map(async (comment) => {
+    const eachVideoComments = await Comment.findByIdAndDelete(comment)
+  })
+
   await Video.findByIdAndDelete(id)
   res.redirect('/')
 }

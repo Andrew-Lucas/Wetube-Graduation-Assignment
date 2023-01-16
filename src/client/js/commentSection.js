@@ -5,9 +5,11 @@ const commentForm = document.getElementById("comment-form")
 
 const commentSpan = document.querySelector("#comment-span")
 
-const deleteCommentBtn = document.getElementById("delete-comment")
+const deleteCommentBtns = document.querySelectorAll("#delete-comment")
+
 
 const deleteComment = async (event)=>{
+  console.log("Deleted")
   const item = event.target.parentElement
   const {id} = item.dataset
   item.remove()
@@ -32,27 +34,28 @@ const showComments = (text, newCommentId, newOwner)=>{
     commentsLi.dataset.id = ""
   }
   commentsLi.dataset.id = newCommentId
+  commentsLi.className = "comments-li"
   
   const commentsSpan = document.createElement("span")
   commentsSpan.id = "comment-span"
-  if(!commentsSpan){
-    const commentsSpan = document.createElement("span")
-    commentsSpan.dataset.owner = ""
-  }
-  commentSpan.dataset.owner = newOwner
-  commentsSpan.innerText = text
-
   const deleteBtn = document.createElement("button")
+  deleteBtn.id = "delete-comment"
   deleteBtn.innerText = "❌"
   commentsLi.appendChild(commentsSpan)
   commentsLi.appendChild(deleteBtn)
   commentsUl.prepend(commentsLi)
-  
+
+  commentsSpan.innerText = text
+  commentsSpan.dataset.owner = newOwner
+
   deleteBtn.addEventListener("click", deleteComment)
 }
 
-if(deleteCommentBtn){
-  deleteCommentBtn.addEventListener("click", deleteComment)
+if(deleteCommentBtns){
+  deleteCommentBtns.forEach((deleteBtn)=> {
+    console.log(deleteBtn)
+    deleteBtn.addEventListener("click", deleteComment)
+  })
 }
 
 const submitCommentForm = async (submitEvent)=>{
