@@ -12,5 +12,3 @@ const operDb = ()=> console.log("Connected to DataBase📀")
 
 db.on("error", dbError)
 db.once("open", operDb)
-
-
