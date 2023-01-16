@@ -52,5 +52,4 @@ app.use('/user', userRouter)
 app.use('/videos', videosRouter)
 app.use('/api', apiRouter)
   
-
 app.listen(PORT, ()=> console.log(`✅Server listening from http://localhost:${PORT}`))
