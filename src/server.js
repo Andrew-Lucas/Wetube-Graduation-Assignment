@@ -17,7 +17,7 @@ import apiRouter from './routers/apiRouter'
 
 const logger = morgan('dev')
 const app = express()
-const PORT = 7000
+const PORT = process.env.PORT || 7000
 
 app.use(logger)
 
